@@ -1,0 +1,347 @@
+:root {
+  --text: #333;
+  --text-muted: #888;
+  --bg: #fff;
+  --bg-alt: #f7f7f8;
+  --border: #e5e4e7;
+  --accent: #2563eb;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg-alt);
+}
+
+#root {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100svh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.layout__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.login-page {
+  padding: 32px 24px;
+}
+
+.login-page__role-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.login-page__role-toggle button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.login-page__role-toggle button.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.login-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-page__form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.login-page__form input {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.login-page__form button[type='submit'] {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+}
+
+.login-page__error {
+  color: var(--danger);
+  font-size: 14px;
+  margin: 0;
+}
+
+.contacts-tab__list,
+.route-tab__list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contacts-tab__list li {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.contacts-tab__label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.phone-link {
+  display: block;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--accent);
+}
+
+.route-tab__list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.dashboard-tab__summary {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.dashboard-tab__summary div {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.dashboard-tab__summary strong {
+  display: block;
+  font-size: 22px;
+}
+
+.dashboard-tab__summary span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.dashboard-tab__list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard-tab__list a {
+  display: block;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.dashboard-tab__group-name {
+  font-weight: 600;
+}
+
+.dashboard-tab__group-progress {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.group-detail__leader {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.group-detail__timeline {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group-detail__timeline li {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.group-detail__timeline li.is-done {
+  border-color: var(--success);
+}
+
+.group-detail__timeline li.is-delayed {
+  border-color: var(--danger);
+}
+
+.group-detail__timeline li.is-upcoming {
+  opacity: 0.6;
+}
+
+.group-detail__timeline-time {
+  font-weight: 600;
+  min-width: 44px;
+}
+
+.group-detail__timeline-actual {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.itinerary-tab select {
+  width: 100%;
+  padding: 8px;
+  margin: 12px 0;
+}
+
+.itinerary-tab__header p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 4px 0;
+}
+
+.itinerary-tab__list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+
+.itinerary-tab__list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.itinerary-tab__time {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.settings-tab hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+.excel-uploader__error {
+  color: var(--danger);
+}
+
+.excel-uploader__mismatch {
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.excel-uploader__failed-place-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.excel-uploader__failed-place-row input {
+  flex: 1;
+  padding: 6px;
+}
+
+.excel-uploader__result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.excel-uploader__result-table td,
+.excel-uploader__result-table th {
+  border: 1px solid var(--border);
+  padding: 6px 8px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.excel-uploader__result-table tr.is-warning {
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+}
+
+.emergency-contacts-editor ul {
+  list-style: none;
+  padding: 0;
+}
+
+.emergency-contacts-editor li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.emergency-contacts-editor__form,
+.teacher-account-form form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.emergency-contacts-editor__form input,
+.emergency-contacts-editor__form select,
+.teacher-account-form input {
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
