@@ -13,6 +13,7 @@ import './CameraCapture.css'
 export default function CameraCapture({ onCapture, onCancel }) {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
+  const [facingMode, setFacingMode] = useState('environment')
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -25,14 +26,16 @@ export default function CameraCapture({ onCapture, onCancel }) {
       }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment' },
+          video: { facingMode },
         })
         if (cancelled) {
           stream.getTracks().forEach((track) => track.stop())
           return
         }
+        streamRef.current?.getTracks().forEach((track) => track.stop())
         streamRef.current = stream
         if (videoRef.current) videoRef.current.srcObject = stream
+        setError('')
       } catch {
         if (!cancelled) setError('카메라를 사용할 수 없습니다. 카메라 권한을 확인해주세요.')
       }
@@ -43,7 +46,11 @@ export default function CameraCapture({ onCapture, onCancel }) {
       cancelled = true
       streamRef.current?.getTracks().forEach((track) => track.stop())
     }
-  }, [])
+  }, [facingMode])
+
+  function handleSwitchCamera() {
+    setFacingMode((prev) => (prev === 'environment' ? 'user' : 'environment'))
+  }
 
   function handleShutterClick() {
     const video = videoRef.current
@@ -70,9 +77,14 @@ export default function CameraCapture({ onCapture, onCancel }) {
       )}
       <div className="camera-capture__actions">
         {!error && (
-          <button type="button" onClick={handleShutterClick}>
-            촬영
-          </button>
+          <>
+            <button type="button" onClick={handleShutterClick}>
+              촬영
+            </button>
+            <button type="button" onClick={handleSwitchCamera}>
+              카메라 전환
+            </button>
+          </>
         )}
         <button type="button" onClick={onCancel}>
           취소
