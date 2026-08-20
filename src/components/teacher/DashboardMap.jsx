@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { GoogleMap } from '@react-google-maps/api'
 import { MarkerClusterer } from '@googlemaps/markerclusterer'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
@@ -9,15 +9,13 @@ const DEFAULT_CENTER = { lat: 37.5665, lng: 126.978 }
 /** All-groups dashboard map: one marker per group at its latest position, clustered per spec 5.2. */
 export default function DashboardMap({ points }) {
   const isLoaded = useGoogleMapsLoaded()
-  const mapRef = useRef(null)
-  const clustererRef = useRef(null)
+  const [map, setMap] = useState(null)
 
   useEffect(() => {
-    if (!isLoaded || !mapRef.current) return
-
-    if (clustererRef.current) {
-      clustererRef.current.clearMarkers()
-    }
+    // `map` becomes non-null only once GoogleMap's onLoad fires (via state, not a
+    // ref) — that's what makes this effect reliably rerun once the map instance
+    // actually exists, instead of possibly running once too early and never again.
+    if (!map) return
 
     const markers = points.map(
       (p) =>
@@ -26,26 +24,16 @@ export default function DashboardMap({ points }) {
           title: p.label,
         }),
     )
-
-    clustererRef.current = new MarkerClusterer({ map: mapRef.current, markers })
+    const clusterer = new MarkerClusterer({ map, markers })
 
     return () => {
-      clustererRef.current?.clearMarkers()
+      clusterer.clearMarkers()
     }
-  }, [isLoaded, points])
+  }, [map, points])
 
   if (!isLoaded) return <div style={CONTAINER_STYLE}>지도를 불러오는 중...</div>
 
   const center = points[0] ? { lat: points[0].lat, lng: points[0].lng } : DEFAULT_CENTER
 
-  return (
-    <GoogleMap
-      mapContainerStyle={CONTAINER_STYLE}
-      center={center}
-      zoom={12}
-      onLoad={(map) => {
-        mapRef.current = map
-      }}
-    />
-  )
+  return <GoogleMap mapContainerStyle={CONTAINER_STYLE} center={center} zoom={12} onLoad={setMap} />
 }
