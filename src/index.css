@@ -51,6 +51,21 @@ a {
   padding: 16px;
 }
 
+.layout__header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px 0;
+}
+
+.layout__logout-button {
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text-muted);
+}
+
 .login-page {
   padding: 32px 24px;
 }

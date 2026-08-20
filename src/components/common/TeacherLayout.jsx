@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import { useSession } from '../../context/SessionContext'
 import BottomTabBar from './BottomTabBar'
 
 const TABS = [
@@ -8,8 +9,15 @@ const TABS = [
 ]
 
 export default function TeacherLayout() {
+  const { logout } = useSession()
+
   return (
     <div className="layout">
+      <header className="layout__header">
+        <button type="button" className="layout__logout-button" onClick={logout}>
+          로그아웃
+        </button>
+      </header>
       <main className="layout__content">
         <Outlet />
       </main>
