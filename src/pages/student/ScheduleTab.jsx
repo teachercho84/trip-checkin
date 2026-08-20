@@ -1,9 +1,10 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 import { performCheckin } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
+import CameraCapture from '../../components/common/CameraCapture'
 import './ScheduleTab.css'
 
 function itemStatus(item, checkinsByItem) {
@@ -17,10 +18,10 @@ export default function ScheduleTab() {
   const { bundle, loading, error, refetch } = useGroupBundle(accessCode)
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null)
   const [photoFile, setPhotoFile] = useState(null)
+  const [cameraOpen, setCameraOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [editingItemId, setEditingItemId] = useState(null)
-  const fileInputRef = useRef(null)
 
   const checkinsByItem = useMemo(() => {
     const map = {}
@@ -31,16 +32,10 @@ export default function ScheduleTab() {
   const timetable = bundle?.timetable ?? []
   const currentItem = timetable.find((item) => itemStatus(item, checkinsByItem) === 'pending')
 
-  function handleTakePhotoClick() {
-    fileInputRef.current?.click()
-  }
-
-  function handleFileChange(e) {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
-    setPhotoFile(file)
-    setPhotoPreviewUrl(URL.createObjectURL(file))
+  function handlePhotoCapture(blob) {
+    setPhotoFile(blob)
+    setPhotoPreviewUrl(URL.createObjectURL(blob))
+    setCameraOpen(false)
   }
 
   async function handleCheckin() {
@@ -76,14 +71,6 @@ export default function ScheduleTab() {
   return (
     <div className="schedule-tab">
       <h1>{bundle.group.name} 일정</h1>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        capture="environment"
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-      />
       {submitError && <p className="schedule-tab__error">{submitError}</p>}
       <ul className="schedule-tab__list">
         {timetable.map((item) => {
@@ -142,21 +129,27 @@ export default function ScheduleTab() {
                 )}
                 {isCurrent && (
                   <div className="schedule-tab__item-actions">
-                    {photoPreviewUrl && (
-                      <img className="schedule-tab__preview" src={photoPreviewUrl} alt="촬영한 사진" />
+                    {cameraOpen ? (
+                      <CameraCapture onCapture={handlePhotoCapture} onCancel={() => setCameraOpen(false)} />
+                    ) : (
+                      <>
+                        {photoPreviewUrl && (
+                          <img className="schedule-tab__preview" src={photoPreviewUrl} alt="촬영한 사진" />
+                        )}
+                        <div className="schedule-tab__buttons">
+                          <button type="button" onClick={() => setCameraOpen(true)} disabled={submitting}>
+                            {photoFile ? '다시 찍기' : '사진 찍기'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleCheckin}
+                            disabled={!photoFile || submitting}
+                          >
+                            {submitting ? '체크인 중...' : '체크인하기'}
+                          </button>
+                        </div>
+                      </>
                     )}
-                    <div className="schedule-tab__buttons">
-                      <button type="button" onClick={handleTakePhotoClick} disabled={submitting}>
-                        {photoFile ? '다시 찍기' : '사진 찍기'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleCheckin}
-                        disabled={!photoFile || submitting}
-                      >
-                        {submitting ? '체크인 중...' : '체크인하기'}
-                      </button>
-                    </div>
                   </div>
                 )}
               </div>

@@ -1,0 +1,23 @@
+.camera-capture {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.camera-capture__video {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 8px;
+  background: #000;
+}
+
+.camera-capture__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.camera-capture__error {
+  color: var(--danger);
+  font-size: 13px;
+}
