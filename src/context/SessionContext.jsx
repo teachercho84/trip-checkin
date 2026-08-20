@@ -33,6 +33,21 @@ export function SessionProvider({ children }) {
     if (data) {
       setRole(data.role === 'teacher' ? 'teacher' : 'leader')
       setGroupId(data.group_id)
+
+      // 모둠장의 일정/경로/연락처 화면은 (학생용과 동일하게) access_code로 조회하는
+      // get_group_bundle()을 그대로 재사용한다. 로그인만으로는 이 값을 모르므로,
+      // 로그인 직후 자기 모둠의 access_code를 한 번 읽어와 저장해둔다.
+      if (data.role !== 'teacher' && data.group_id) {
+        const { data: groupRow } = await supabase
+          .from('groups')
+          .select('access_code')
+          .eq('id', data.group_id)
+          .maybeSingle()
+        if (groupRow?.access_code) {
+          localStorage.setItem(ACCESS_CODE_KEY, groupRow.access_code)
+          setAccessCodeState(groupRow.access_code)
+        }
+      }
     }
   }, [accessCode])
 

@@ -242,6 +242,47 @@ a {
   color: var(--text-muted);
 }
 
+.group-detail__timeline-item-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.group-detail__timeline-item-actions button {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.group-detail__danger-zone {
+  margin-top: 32px;
+  padding: 16px;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+}
+
+.group-detail__danger-zone h2 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.group-detail__danger-zone p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.group-detail__danger-zone-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.group-detail__danger-zone-form input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
 .itinerary-tab select {
   width: 100%;
   padding: 8px;

@@ -60,6 +60,17 @@
   margin-top: 8px;
 }
 
+.schedule-tab__item-edit-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.schedule-tab__item-edit-actions button {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
 .schedule-tab__preview {
   width: 100%;
   max-width: 200px;

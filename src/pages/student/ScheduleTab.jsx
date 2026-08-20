@@ -1,7 +1,9 @@
 import { useMemo, useRef, useState } from 'react'
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
+import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 import { performCheckin } from '../../lib/checkin'
+import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import './ScheduleTab.css'
 
 function itemStatus(item, checkinsByItem) {
@@ -9,12 +11,15 @@ function itemStatus(item, checkinsByItem) {
 }
 
 export default function ScheduleTab() {
-  const { accessCode } = useSession()
+  const { accessCode, role } = useSession()
+  const isLeader = role === 'leader'
+  const mapsLoaded = useGoogleMapsLoaded()
   const { bundle, loading, error, refetch } = useGroupBundle(accessCode)
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null)
   const [photoFile, setPhotoFile] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [editingItemId, setEditingItemId] = useState(null)
   const fileInputRef = useRef(null)
 
   const checkinsByItem = useMemo(() => {
@@ -59,6 +64,11 @@ export default function ScheduleTab() {
     }
   }
 
+  async function handleDeleteItem(item) {
+    const deleted = await deleteTimetableItem(item, Boolean(checkinsByItem[item.id]))
+    if (deleted) refetch()
+  }
+
   if (!accessCode) return <p>접속 코드가 없습니다. 모둠 링크로 다시 접속해주세요.</p>
   if (loading) return <p>불러오는 중...</p>
   if (error) return <p className="schedule-tab__error">일정을 불러오지 못했습니다: {error.message}</p>
@@ -80,6 +90,24 @@ export default function ScheduleTab() {
           const status = itemStatus(item, checkinsByItem)
           const isCurrent = item.id === currentItem?.id
           const checkin = checkinsByItem[item.id]
+
+          if (isLeader && editingItemId === item.id) {
+            return (
+              <li key={item.id} className="schedule-tab__item">
+                <TimetableItemEditForm
+                  item={item}
+                  hasCheckin={Boolean(checkin)}
+                  mapsLoaded={mapsLoaded}
+                  onSaved={() => {
+                    setEditingItemId(null)
+                    refetch()
+                  }}
+                  onCancel={() => setEditingItemId(null)}
+                />
+              </li>
+            )
+          }
+
           return (
             <li
               key={item.id}
@@ -94,6 +122,16 @@ export default function ScheduleTab() {
               <div className="schedule-tab__item-body">
                 <div className="schedule-tab__item-place">{item.place_name}</div>
                 {item.task && <div className="schedule-tab__item-task">{item.task}</div>}
+                {isLeader && (
+                  <div className="schedule-tab__item-edit-actions">
+                    <button type="button" onClick={() => setEditingItemId(item.id)}>
+                      수정
+                    </button>
+                    <button type="button" onClick={() => handleDeleteItem(item)}>
+                      삭제
+                    </button>
+                  </div>
+                )}
                 {status === 'done' && (
                   <div className="schedule-tab__item-checked">
                     체크인 완료 · {new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR')}
