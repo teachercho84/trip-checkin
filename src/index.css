@@ -257,6 +257,13 @@ a {
   color: var(--text-muted);
 }
 
+.group-detail__timeline-photo {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
 .group-detail__timeline-item-actions {
   margin-left: auto;
   display: flex;

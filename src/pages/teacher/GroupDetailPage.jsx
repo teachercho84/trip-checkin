@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAllGroupsRealtime } from '../../hooks/useAllGroupsRealtime'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 import { supabase } from '../../lib/supabaseClient'
+import { getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import MapView from '../../components/common/MapView'
 
@@ -103,6 +104,15 @@ export default function GroupDetailPage() {
                 <span className="group-detail__timeline-actual">
                   실제 {new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR')}
                 </span>
+              )}
+              {checkin?.photo_path && (
+                <a href={getCheckinPhotoUrl(checkin.photo_path)} target="_blank" rel="noreferrer">
+                  <img
+                    className="group-detail__timeline-photo"
+                    src={getCheckinPhotoUrl(checkin.photo_path)}
+                    alt="체크인 사진"
+                  />
+                </a>
               )}
               <span className="group-detail__timeline-item-actions">
                 <button type="button" onClick={() => setEditingItemId(item.id)}>

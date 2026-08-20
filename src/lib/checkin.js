@@ -2,6 +2,12 @@ import { supabase } from './supabaseClient'
 import { compressPhoto } from './photo'
 import { getCurrentPositionOnce } from './geolocation'
 
+/** checkin-photos 버킷은 공개 읽기 정책이라 서명 없이 바로 공개 URL을 쓸 수 있다. */
+export function getCheckinPhotoUrl(photoPath) {
+  if (!photoPath) return null
+  return supabase.storage.from('checkin-photos').getPublicUrl(photoPath).data.publicUrl
+}
+
 /**
  * Full check-in flow for a single itinerary item: compress the photo,
  * capture location once, upload the photo to Storage, then record the

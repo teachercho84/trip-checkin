@@ -48,6 +48,16 @@
   font-size: 13px;
   color: var(--success);
   margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schedule-tab__checked-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
 }
 
 .schedule-tab__item-upcoming {

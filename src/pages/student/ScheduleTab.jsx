@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
-import { performCheckin } from '../../lib/checkin'
+import { performCheckin, getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import CameraCapture from '../../components/common/CameraCapture'
 import './ScheduleTab.css'
@@ -122,6 +122,15 @@ export default function ScheduleTab() {
                 {status === 'done' && (
                   <div className="schedule-tab__item-checked">
                     체크인 완료 · {new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR')}
+                    {checkin.photo_path && (
+                      <a href={getCheckinPhotoUrl(checkin.photo_path)} target="_blank" rel="noreferrer">
+                        <img
+                          className="schedule-tab__checked-photo"
+                          src={getCheckinPhotoUrl(checkin.photo_path)}
+                          alt="체크인 사진"
+                        />
+                      </a>
+                    )}
                   </div>
                 )}
                 {!isCurrent && status === 'pending' && (
