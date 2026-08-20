@@ -25,7 +25,7 @@ body {
 #root {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100svh;
+  min-height: 100dvh;
   background: var(--bg);
   display: flex;
   flex-direction: column;
@@ -42,7 +42,7 @@ a {
 .layout {
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  min-height: 100dvh;
 }
 
 .layout__content {
