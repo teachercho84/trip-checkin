@@ -42,8 +42,9 @@ export function SessionProvider({ children }) {
       resolveAuthRole(session).finally(() => setLoading(false))
     })
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setLoading(true)
       setAuthSession(session)
-      resolveAuthRole(session)
+      resolveAuthRole(session).finally(() => setLoading(false))
     })
     return () => listener.subscription.unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
