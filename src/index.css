@@ -59,28 +59,6 @@ a {
   padding: 16px;
 }
 
-.layout__header {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 16px 0;
-}
-
-.layout__logout-button {
-  font-size: 12px;
-  padding: 4px 4px;
-  border: none;
-  border-radius: 4px;
-  background: none;
-  color: var(--text-muted);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.layout__logout-button:hover,
-.layout__logout-button:focus-visible {
-  color: var(--accent);
-}
-
 .login-page {
   padding: 32px 24px;
 }
@@ -185,15 +163,18 @@ a {
   font-size: 14px;
 }
 
-.dashboard-tab__header {
+.page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.dashboard-tab__logout-button {
+.top-action-button {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 6px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -201,10 +182,11 @@ a {
   color: var(--text-muted);
   font-size: 12px;
   font-weight: 600;
+  text-decoration: none;
 }
 
-.dashboard-tab__logout-button:hover,
-.dashboard-tab__logout-button:focus-visible {
+.top-action-button:hover,
+.top-action-button:focus-visible {
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -259,22 +241,6 @@ a {
 .dashboard-tab__group-progress {
   font-size: 13px;
   color: var(--text-muted);
-}
-
-.group-detail__back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 10px;
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.group-detail__back-link:hover,
-.group-detail__back-link:focus-visible {
-  color: var(--accent);
 }
 
 .group-detail__leader {

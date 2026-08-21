@@ -13,7 +13,7 @@ function itemStatus(item, checkinsByItem) {
 }
 
 export default function ScheduleTab() {
-  const { accessCode, role } = useSession()
+  const { accessCode, role, logout } = useSession()
   const isLeader = role === 'leader'
   const mapsLoaded = useGoogleMapsLoaded()
   const { bundle, loading, error, refetch } = useGroupBundle(accessCode)
@@ -71,7 +71,12 @@ export default function ScheduleTab() {
 
   return (
     <div className="schedule-tab">
-      <h1>{bundle.group.name} 일정</h1>
+      <div className="page-header">
+        <h1>{bundle.group.name} 일정</h1>
+        <button type="button" className="top-action-button" onClick={logout}>
+          로그아웃
+        </button>
+      </div>
       {submitError && <p className="schedule-tab__error">{submitError}</p>}
       <ul className="schedule-tab__list">
         {timetable.map((item) => {

@@ -53,9 +53,9 @@ export default function DashboardTab() {
 
   return (
     <div className="dashboard-tab">
-      <div className="dashboard-tab__header">
+      <div className="page-header">
         <h1>현황판</h1>
-        <button type="button" className="dashboard-tab__logout-button" onClick={logout}>
+        <button type="button" className="top-action-button" onClick={logout}>
           로그아웃
         </button>
       </div>
