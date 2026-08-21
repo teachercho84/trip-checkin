@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { GoogleMap } from '@react-google-maps/api'
 import { MarkerClusterer } from '@googlemaps/markerclusterer'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
-import './DashboardMap.css'
 
 const CONTAINER_STYLE = { width: '100%', height: '280px', borderRadius: '16px' }
 const DEFAULT_CENTER = { lat: 37.5665, lng: 126.978 }
@@ -23,13 +22,6 @@ export default function DashboardMap({ points }) {
         new window.google.maps.Marker({
           position: { lat: p.lat, lng: p.lng },
           title: p.label,
-          label: {
-            text: p.label,
-            color: '#fff',
-            fontSize: '11px',
-            fontWeight: '600',
-            className: 'dashboard-map__pin-label',
-          },
           icon: {
             path: window.google.maps.SymbolPath.CIRCLE,
             scale: 8,
@@ -37,7 +29,6 @@ export default function DashboardMap({ points }) {
             fillOpacity: 1,
             strokeColor: '#fff',
             strokeWeight: 2,
-            labelOrigin: new window.google.maps.Point(0, -16),
           },
         }),
     )
