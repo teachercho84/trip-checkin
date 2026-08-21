@@ -301,6 +301,7 @@ a {
 }
 
 .group-detail__timeline li {
+  position: relative;
   padding: 10px;
   border-radius: 16px;
   border: 1px solid var(--border);
