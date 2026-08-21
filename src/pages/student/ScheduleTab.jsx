@@ -5,6 +5,7 @@ import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 import { performCheckin, getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import CameraCapture from '../../components/common/CameraCapture'
+import CheckinStamp from '../../components/common/CheckinStamp'
 import './ScheduleTab.css'
 
 function itemStatus(item, checkinsByItem) {
@@ -120,18 +121,25 @@ export default function ScheduleTab() {
                   </div>
                 )}
                 {status === 'done' && (
-                  <div className="schedule-tab__item-checked">
-                    체크인 완료 · {new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR')}
+                  <>
+                    <CheckinStamp
+                      time={new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    />
                     {checkin.photo_path && (
-                      <a href={getCheckinPhotoUrl(checkin.photo_path)} target="_blank" rel="noreferrer">
-                        <img
-                          className="schedule-tab__checked-photo"
-                          src={getCheckinPhotoUrl(checkin.photo_path)}
-                          alt="체크인 사진"
-                        />
-                      </a>
+                      <div className="schedule-tab__item-checked">
+                        <a href={getCheckinPhotoUrl(checkin.photo_path)} target="_blank" rel="noreferrer">
+                          <img
+                            className="schedule-tab__checked-photo"
+                            src={getCheckinPhotoUrl(checkin.photo_path)}
+                            alt="체크인 사진"
+                          />
+                        </a>
+                      </div>
                     )}
-                  </div>
+                  </>
                 )}
                 {!isCurrent && status === 'pending' && (
                   <div className="schedule-tab__item-upcoming">예정</div>

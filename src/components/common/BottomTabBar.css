@@ -2,17 +2,32 @@
   position: sticky;
   bottom: 0;
   display: flex;
-  border-top: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--surface);
+  box-shadow: 0 -1px 0 var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .bottom-tab-bar__item {
   flex: 1;
-  text-align: center;
-  padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: center;
+  padding: 8px 4px;
   text-decoration: none;
   color: var(--text-muted);
-  font-size: 14px;
+}
+
+.bottom-tab-bar__pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+.bottom-tab-bar__item.is-active .bottom-tab-bar__pill {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .bottom-tab-bar__item.is-active {

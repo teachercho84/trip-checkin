@@ -1,7 +1,7 @@
 import { GoogleMap, Marker, Polyline } from '@react-google-maps/api'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 
-const CONTAINER_STYLE = { width: '100%', height: '320px', borderRadius: '10px' }
+const CONTAINER_STYLE = { width: '100%', height: '320px', borderRadius: '16px' }
 
 /**
  * Renders a group's checked-in points as numbered markers connected by a
@@ -18,7 +18,19 @@ export default function MapView({ donePoints = [], upcomingPoints = [], center }
   return (
     <GoogleMap mapContainerStyle={CONTAINER_STYLE} center={mapCenter} zoom={13}>
       {donePoints.map((p, i) => (
-        <Marker key={`done-${i}`} position={p} label={String(i + 1)} />
+        <Marker
+          key={`done-${i}`}
+          position={p}
+          label={{ text: String(i + 1), color: '#fff', fontSize: '12px', fontWeight: '600' }}
+          icon={{
+            path: window.google.maps.SymbolPath.CIRCLE,
+            scale: 10,
+            fillColor: '#ff7a59',
+            fillOpacity: 1,
+            strokeColor: '#fff',
+            strokeWeight: 2,
+          }}
+        />
       ))}
       {upcomingPoints.map((p, i) => (
         <Marker
@@ -35,7 +47,7 @@ export default function MapView({ donePoints = [], upcomingPoints = [], center }
         />
       ))}
       {donePoints.length > 1 && (
-        <Polyline path={donePoints} options={{ strokeColor: '#2563eb', strokeWeight: 3 }} />
+        <Polyline path={donePoints} options={{ strokeColor: '#159aa6', strokeWeight: 3 }} />
       )}
     </GoogleMap>
   )

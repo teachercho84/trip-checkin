@@ -6,6 +6,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import MapView from '../../components/common/MapView'
+import CheckinStamp from '../../components/common/CheckinStamp'
 
 export default function GroupDetailPage() {
   const { groupId } = useParams()
@@ -101,9 +102,12 @@ export default function GroupDetailPage() {
               <span className="group-detail__timeline-time">{item.time_planned?.slice(0, 5)}</span>
               <span>{item.place_name}</span>
               {checkin && (
-                <span className="group-detail__timeline-actual">
-                  실제 {new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR')}
-                </span>
+                <CheckinStamp
+                  time={new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                />
               )}
               {checkin?.photo_path && (
                 <a href={getCheckinPhotoUrl(checkin.photo_path)} target="_blank" rel="noreferrer">

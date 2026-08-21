@@ -1,13 +1,16 @@
 :root {
-  --text: #333;
-  --text-muted: #888;
-  --bg: #fff;
-  --bg-alt: #f7f7f8;
+  --text: #1c2b45;
+  --text-muted: #7c8ca6;
+  --bg: #f3fafb;
+  --surface: #fff;
   --border: #e5e4e7;
-  --accent: #2563eb;
-  --success: #16a34a;
-  --danger: #dc2626;
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --accent: #ff7a59;
+  --accent-secondary: #159aa6;
+  --success: #2faf6e;
+  --danger: #e5484d;
+  --card-shadow: 0 2px 8px rgba(28, 43, 69, 0.06);
+  --sans: 'Pretendard Variable', Pretendard, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --display: 'Jua', var(--sans);
   color-scheme: light dark;
 }
 
@@ -19,7 +22,7 @@ body {
   margin: 0;
   font-family: var(--sans);
   color: var(--text);
-  background: var(--bg-alt);
+  background: var(--bg);
 }
 
 #root {
@@ -29,6 +32,11 @@ body {
   background: var(--bg);
   display: flex;
   flex-direction: column;
+}
+
+h1 {
+  font-family: var(--display);
+  font-weight: 400;
 }
 
 button {
@@ -54,16 +62,23 @@ a {
 .layout__header {
   display: flex;
   justify-content: flex-end;
-  padding: 8px 16px 0;
+  padding: 10px 16px 0;
 }
 
 .layout__logout-button {
   font-size: 12px;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
+  padding: 4px 4px;
+  border: none;
+  border-radius: 4px;
+  background: none;
   color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.layout__logout-button:hover,
+.layout__logout-button:focus-visible {
+  color: var(--accent);
 }
 
 .login-page {
@@ -81,7 +96,7 @@ a {
   padding: 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--bg);
+  background: var(--surface);
 }
 
 .login-page__role-toggle button.is-active {
@@ -138,8 +153,9 @@ a {
 
 .contacts-tab__list li {
   padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
 }
 
 .contacts-tab__label {
@@ -171,8 +187,9 @@ a {
   flex: 1;
   text-align: center;
   padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
 }
 
 .dashboard-tab__summary strong {
@@ -197,8 +214,9 @@ a {
 .dashboard-tab__list a {
   display: block;
   padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
   text-decoration: none;
 }
 
@@ -227,8 +245,10 @@ a {
 
 .group-detail__timeline li {
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 16px;
   border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
   display: flex;
   gap: 8px;
   font-size: 14px;
@@ -279,7 +299,9 @@ a {
   margin-top: 32px;
   padding: 16px;
   border: 1px solid var(--danger);
-  border-radius: 8px;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 .group-detail__danger-zone h2 {

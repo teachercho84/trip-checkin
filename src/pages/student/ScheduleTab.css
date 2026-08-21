@@ -8,11 +8,14 @@
 }
 
 .schedule-tab__item {
+  position: relative;
   display: flex;
   gap: 12px;
   padding: 12px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 .schedule-tab__item.is-done {
