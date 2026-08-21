@@ -2,10 +2,15 @@ import { supabase } from './supabaseClient'
 import { compressPhoto } from './photo'
 import { getCurrentPositionOnce } from './geolocation'
 
-/** checkin-photos 버킷은 공개 읽기 정책이라 서명 없이 바로 공개 URL을 쓸 수 있다. */
-export function getCheckinPhotoUrl(photoPath) {
+/**
+ * checkin-photos 버킷은 공개 읽기 정책이라 서명 없이 바로 공개 URL을 쓸 수 있다.
+ * 재체크인은 같은 경로에 사진을 덮어쓰므로, checkedInAt을 캐시 무효화 쿼리로 붙여
+ * 브라우저가 예전 캐시된 사진을 계속 보여주지 않게 한다.
+ */
+export function getCheckinPhotoUrl(photoPath, checkedInAt) {
   if (!photoPath) return null
-  return supabase.storage.from('checkin-photos').getPublicUrl(photoPath).data.publicUrl
+  const url = supabase.storage.from('checkin-photos').getPublicUrl(photoPath).data.publicUrl
+  return checkedInAt ? `${url}?t=${encodeURIComponent(checkedInAt)}` : url
 }
 
 /**

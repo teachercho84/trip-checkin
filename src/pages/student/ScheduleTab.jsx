@@ -155,10 +155,14 @@ export default function ScheduleTab() {
                     />
                     {checkin.photo_path && (
                       <div className="schedule-tab__item-checked">
-                        <a href={getCheckinPhotoUrl(checkin.photo_path)} target="_blank" rel="noreferrer">
+                        <a
+                          href={getCheckinPhotoUrl(checkin.photo_path, checkin.checked_in_at)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <img
                             className="schedule-tab__checked-photo"
-                            src={getCheckinPhotoUrl(checkin.photo_path)}
+                            src={getCheckinPhotoUrl(checkin.photo_path, checkin.checked_in_at)}
                             alt="체크인 사진"
                           />
                         </a>

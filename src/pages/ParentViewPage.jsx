@@ -55,10 +55,14 @@ export default function ParentViewPage() {
                 />
               )}
               {checkin?.photo_path && (
-                <a href={getCheckinPhotoUrl(checkin.photo_path)} target="_blank" rel="noreferrer">
+                <a
+                  href={getCheckinPhotoUrl(checkin.photo_path, checkin.checked_in_at)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <img
                     className="group-detail__timeline-photo"
-                    src={getCheckinPhotoUrl(checkin.photo_path)}
+                    src={getCheckinPhotoUrl(checkin.photo_path, checkin.checked_in_at)}
                     alt="체크인 사진"
                   />
                 </a>
