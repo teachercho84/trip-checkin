@@ -197,13 +197,21 @@ a {
   margin: 12px 0;
 }
 
-.dashboard-tab__summary div {
+.dashboard-tab__summary button {
   flex: 1;
   text-align: center;
   padding: 12px;
   background: var(--surface);
+  border: 2px solid transparent;
   border-radius: 16px;
   box-shadow: var(--card-shadow);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.dashboard-tab__summary button.is-active {
+  border-color: var(--accent);
 }
 
 .dashboard-tab__summary strong {
@@ -241,6 +249,13 @@ a {
 .dashboard-tab__group-progress {
   font-size: 13px;
   color: var(--text-muted);
+}
+
+.dashboard-tab__list-empty {
+  text-align: center;
+  padding: 16px;
+  color: var(--text-muted);
+  font-size: 14px;
 }
 
 .parent-group-list__search {
