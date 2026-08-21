@@ -67,20 +67,10 @@ export function SettingsIcon() {
   )
 }
 
-export function StampsIcon() {
-  return (
-    <svg {...ICON_PROPS}>
-      <circle cx="12" cy="8.5" r="6" />
-      <polyline points="8.2 13.9 7 22 12 19.2 17 22 15.8 13.9" />
-    </svg>
-  )
-}
-
 export const TAB_ICONS = {
   일정: ScheduleIcon,
   경로: RouteIcon,
   연락처: ContactsIcon,
-  도장판: StampsIcon,
   현황판: DashboardIcon,
   계획서: ItineraryIcon,
   설정: SettingsIcon,
