@@ -6,6 +6,7 @@ import TeacherLayout from './components/common/TeacherLayout'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import ScheduleTab from './pages/student/ScheduleTab'
 import RouteTab from './pages/student/RouteTab'
+import StampsTab from './pages/student/StampsTab'
 import ContactsTab from './pages/student/ContactsTab'
 import DashboardTab from './pages/teacher/DashboardTab'
 import GroupDetailPage from './pages/teacher/GroupDetailPage'
@@ -28,6 +29,7 @@ export default function AppRouter() {
         >
           <Route path="/student/schedule" element={<ScheduleTab />} />
           <Route path="/student/route" element={<RouteTab />} />
+          <Route path="/student/stamps" element={<StampsTab />} />
           <Route path="/student/contacts" element={<ContactsTab />} />
         </Route>
 

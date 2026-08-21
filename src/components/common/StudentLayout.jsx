@@ -4,6 +4,7 @@ import BottomTabBar from './BottomTabBar'
 const TABS = [
   { to: '/student/schedule', label: '일정' },
   { to: '/student/route', label: '경로' },
+  { to: '/student/stamps', label: '도장판' },
   { to: '/student/contacts', label: '연락처' },
 ]
 
