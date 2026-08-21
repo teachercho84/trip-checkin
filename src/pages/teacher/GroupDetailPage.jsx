@@ -63,7 +63,9 @@ export default function GroupDetailPage() {
 
   return (
     <div className="group-detail">
-      <Link to="/teacher/dashboard">← 현황판으로</Link>
+      <Link to="/teacher/dashboard" className="group-detail__back-link">
+        ← 현황판으로
+      </Link>
       <h1>{group.name}</h1>
       <p className="group-detail__leader">
         모둠장 {group.leader_name} · {group.leader_phone}
