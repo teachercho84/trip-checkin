@@ -59,14 +59,17 @@ export default function TimetableItemEditForm({ item, groupId, hasCheckin, mapsL
       return
     }
 
-    const update = { time_planned: time, place_name: place, task: task || null }
-    if (place !== item.place_name) {
-      update.lat = lat
-      update.lng = lng
-      update.geocode_status = geocodeStatus
-    }
-
-    const { error: updateError } = await supabase.from('timetable_items').update(update).eq('id', item.id)
+    const updateGeocode = place !== item.place_name
+    const { error: updateError } = await supabase.rpc('update_timetable_item', {
+      p_item_id: item.id,
+      p_time_planned: time,
+      p_place_name: place,
+      p_task: task || null,
+      p_lat: updateGeocode ? lat : null,
+      p_lng: updateGeocode ? lng : null,
+      p_geocode_status: updateGeocode ? geocodeStatus : null,
+      p_update_geocode: updateGeocode,
+    })
     setSaving(false)
     if (updateError) {
       setError(updateError.message)
