@@ -41,6 +41,18 @@ end;
 $$;
 grant execute on function get_group_bundle(text) to anon;
 
+-- 전체 모둠 목록 조회 (학부모 공용 링크 -> 모둠 선택 화면용).
+-- leader_phone은 여기서도 제외. access_code는 포함 -- 목록에서 모둠을 고르면
+-- 그 access_code로 기존 /p/:accessCode(get_group_bundle) 화면으로 이동한다.
+create or replace function get_all_groups_summary()
+returns json
+language sql security definer stable
+as $$
+  select coalesce(json_agg(g order by name), '[]'::json)
+  from (select id, name, leader_name, access_code from groups) g;
+$$;
+grant execute on function get_all_groups_summary() to anon;
+
 -- 접속코드로 체크인 쓰기 (해당 모둠 소유 항목인지 검증 후 삽입)
 create or replace function submit_checkin(
   p_access_code text, p_timetable_item_id uuid,

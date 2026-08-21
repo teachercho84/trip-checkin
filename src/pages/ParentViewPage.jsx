@@ -33,6 +33,9 @@ export default function ParentViewPage() {
     <div className="group-detail parent-view">
       <h1>{bundle.group.name}</h1>
       <p className="group-detail__leader">모둠장 {bundle.group.leader_name}</p>
+      {bundle.members?.length > 0 && (
+        <p className="group-detail__members">모둠원 {bundle.members.map((m) => m.name).join(', ')}</p>
+      )}
 
       <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
 

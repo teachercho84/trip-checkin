@@ -17,7 +17,6 @@ export default function GroupDetailPage() {
   const [deleteGroupInput, setDeleteGroupInput] = useState('')
   const [deletingGroup, setDeletingGroup] = useState(false)
   const [groupError, setGroupError] = useState('')
-  const [parentLinkCopied, setParentLinkCopied] = useState(false)
 
   const group = groups.find((g) => g.id === groupId)
   const items = useMemo(
@@ -41,13 +40,6 @@ export default function GroupDetailPage() {
   async function handleDeleteItem(item) {
     const deleted = await deleteTimetableItem(item, Boolean(checkinsByItem[item.id]))
     if (deleted) refetch()
-  }
-
-  async function handleCopyParentLink() {
-    const link = `${window.location.origin}${import.meta.env.BASE_URL}#/p/${group.access_code}`
-    await navigator.clipboard.writeText(link)
-    setParentLinkCopied(true)
-    setTimeout(() => setParentLinkCopied(false), 2000)
   }
 
   async function handleDeleteGroup() {
@@ -80,20 +72,6 @@ export default function GroupDetailPage() {
       <p className="group-detail__leader">
         모둠장 {group.leader_name} · {group.leader_phone}
       </p>
-
-      <div className="group-detail__parent-link">
-        <span className="group-detail__parent-link-label">학부모 공유 링크</span>
-        <div className="group-detail__parent-link-row">
-          <input
-            readOnly
-            value={`${window.location.origin}${import.meta.env.BASE_URL}#/p/${group.access_code}`}
-            onFocus={(e) => e.target.select()}
-          />
-          <button type="button" className="top-action-button" onClick={handleCopyParentLink}>
-            {parentLinkCopied ? '복사됨' : '복사'}
-          </button>
-        </div>
-      </div>
 
       <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
 

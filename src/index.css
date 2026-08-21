@@ -243,7 +243,19 @@ a {
   color: var(--text-muted);
 }
 
-.group-detail__leader {
+.parent-group-list__search {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--surface);
+  color: inherit;
+}
+
+.group-detail__leader,
+.group-detail__members {
   color: var(--text-muted);
   font-size: 14px;
 }
