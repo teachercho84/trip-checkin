@@ -1,0 +1,7 @@
+.dashboard-map__pin-label {
+  background: var(--text);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
