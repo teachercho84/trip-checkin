@@ -248,6 +248,37 @@ a {
   font-size: 14px;
 }
 
+.parent-view {
+  padding: 16px;
+}
+
+.group-detail__parent-link {
+  margin: 12px 0 16px;
+}
+
+.group-detail__parent-link-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.group-detail__parent-link-row {
+  display: flex;
+  gap: 8px;
+}
+
+.group-detail__parent-link-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--bg);
+}
+
 .group-detail__timeline {
   list-style: none;
   padding: 0;

@@ -15,7 +15,7 @@ export function useAllGroupsRealtime() {
   const loadAll = useCallback(async () => {
     setLoading(true)
     const [groupsRes, timetableRes, checkinsRes] = await Promise.all([
-      supabase.from('groups').select('id, name, leader_name, leader_phone'),
+      supabase.from('groups').select('id, name, leader_name, leader_phone, access_code'),
       supabase.from('timetable_items').select('*').order('seq'),
       supabase.from('checkins').select('*'),
     ])

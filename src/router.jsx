@@ -1,6 +1,7 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import GroupEntryPage from './pages/GroupEntryPage'
+import ParentViewPage from './pages/ParentViewPage'
 import StudentLayout from './components/common/StudentLayout'
 import TeacherLayout from './components/common/TeacherLayout'
 import ProtectedRoute from './components/common/ProtectedRoute'
@@ -18,6 +19,7 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/g/:accessCode" element={<GroupEntryPage />} />
+        <Route path="/p/:accessCode" element={<ParentViewPage />} />
 
         <Route
           element={
