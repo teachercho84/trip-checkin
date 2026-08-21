@@ -23,6 +23,7 @@ export default function ScheduleTab() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [editingItemId, setEditingItemId] = useState(null)
+  const [retryItemId, setRetryItemId] = useState(null)
 
   const checkinsByItem = useMemo(() => {
     const map = {}
@@ -39,25 +40,42 @@ export default function ScheduleTab() {
     setCameraOpen(false)
   }
 
-  async function handleCheckin() {
-    if (!currentItem || !photoFile) return
+  async function handleCheckin(itemId) {
+    if (!itemId || !photoFile) return
     setSubmitting(true)
     setSubmitError('')
     try {
       await performCheckin({
         accessCode,
         groupId: bundle.group.id,
-        timetableItemId: currentItem.id,
+        timetableItemId: itemId,
         photoFile,
       })
       setPhotoFile(null)
       setPhotoPreviewUrl(null)
+      setRetryItemId(null)
       await refetch()
     } catch (err) {
       setSubmitError(err.message ?? '체크인에 실패했습니다.')
     } finally {
       setSubmitting(false)
     }
+  }
+
+  function handleStartRetry(item) {
+    if (!window.confirm('다시 체크인하면 이전 사진은 사라져요. 계속할까요?')) return
+    setPhotoFile(null)
+    setPhotoPreviewUrl(null)
+    setCameraOpen(false)
+    setSubmitError('')
+    setRetryItemId(item.id)
+  }
+
+  function handleCancelRetry() {
+    setPhotoFile(null)
+    setPhotoPreviewUrl(null)
+    setCameraOpen(false)
+    setRetryItemId(null)
   }
 
   async function handleDeleteItem(item) {
@@ -83,6 +101,8 @@ export default function ScheduleTab() {
           const status = itemStatus(item, checkinsByItem)
           const isCurrent = item.id === currentItem?.id
           const checkin = checkinsByItem[item.id]
+          const isRetrying = retryItemId === item.id
+          const showCheckinAction = isCurrent || isRetrying
 
           if (isLeader && editingItemId === item.id) {
             return (
@@ -125,7 +145,7 @@ export default function ScheduleTab() {
                     </button>
                   </div>
                 )}
-                {status === 'done' && (
+                {status === 'done' && !isRetrying && (
                   <>
                     <CheckinStamp
                       time={new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR', {
@@ -144,12 +164,17 @@ export default function ScheduleTab() {
                         </a>
                       </div>
                     )}
+                    <div className="schedule-tab__item-edit-actions">
+                      <button type="button" onClick={() => handleStartRetry(item)}>
+                        다시 체크인
+                      </button>
+                    </div>
                   </>
                 )}
                 {!isCurrent && status === 'pending' && (
                   <div className="schedule-tab__item-upcoming">예정</div>
                 )}
-                {isCurrent && (
+                {showCheckinAction && (
                   <div className="schedule-tab__item-actions">
                     {cameraOpen ? (
                       <CameraCapture onCapture={handlePhotoCapture} onCancel={() => setCameraOpen(false)} />
@@ -164,11 +189,16 @@ export default function ScheduleTab() {
                           </button>
                           <button
                             type="button"
-                            onClick={handleCheckin}
+                            onClick={() => handleCheckin(item.id)}
                             disabled={!photoFile || submitting}
                           >
                             {submitting ? '체크인 중...' : '체크인하기'}
                           </button>
+                          {isRetrying && (
+                            <button type="button" onClick={handleCancelRetry} disabled={submitting}>
+                              취소
+                            </button>
+                          )}
                         </div>
                       </>
                     )}

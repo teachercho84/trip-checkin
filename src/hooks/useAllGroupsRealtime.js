@@ -4,7 +4,8 @@ import { supabase } from '../lib/supabaseClient'
 /**
  * Teacher dashboard data source: all groups, their timetables, and all
  * check-ins, kept live via a Supabase Realtime subscription on `checkins`
- * INSERTs. RLS restricts all of this to authenticated teachers.
+ * INSERTs and UPDATEs (students can re-check-in, which overwrites the
+ * existing row). RLS restricts all of this to authenticated teachers.
  */
 export function useAllGroupsRealtime() {
   const [groups, setGroups] = useState([])
@@ -32,6 +33,9 @@ export function useAllGroupsRealtime() {
       .channel('checkins-all')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'checkins' }, (payload) => {
         setCheckins((prev) => [...prev, payload.new])
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'checkins' }, (payload) => {
+        setCheckins((prev) => prev.map((c) => (c.id === payload.new.id ? payload.new : c)))
       })
       .subscribe()
 
