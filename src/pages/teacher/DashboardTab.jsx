@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useAllGroupsRealtime } from '../../hooks/useAllGroupsRealtime'
+import { useSession } from '../../context/SessionContext'
 import DashboardMap from '../../components/teacher/DashboardMap'
 
 function buildGroupSummaries(groups, timetableItems, checkins) {
@@ -32,6 +33,7 @@ function buildGroupSummaries(groups, timetableItems, checkins) {
 }
 
 export default function DashboardTab() {
+  const { logout } = useSession()
   const { groups, timetableItems, checkins, loading } = useAllGroupsRealtime()
 
   const summaries = useMemo(
@@ -51,7 +53,12 @@ export default function DashboardTab() {
 
   return (
     <div className="dashboard-tab">
-      <h1>현황판</h1>
+      <div className="dashboard-tab__header">
+        <h1>현황판</h1>
+        <button type="button" className="dashboard-tab__logout-button" onClick={logout}>
+          로그아웃
+        </button>
+      </div>
       <div className="dashboard-tab__summary">
         <div>
           <strong>{totalGroups}</strong>

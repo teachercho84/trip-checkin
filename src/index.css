@@ -185,6 +185,30 @@ a {
   font-size: 14px;
 }
 
+.dashboard-tab__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dashboard-tab__logout-button {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dashboard-tab__logout-button:hover,
+.dashboard-tab__logout-button:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .dashboard-tab__summary {
   display: flex;
   gap: 12px;
