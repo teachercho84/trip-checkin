@@ -116,3 +116,7 @@
 .schedule-tab__error {
   color: var(--danger);
 }
+
+.schedule-tab__add {
+  margin-top: 16px;
+}

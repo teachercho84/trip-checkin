@@ -24,6 +24,7 @@ export default function ScheduleTab() {
   const [submitError, setSubmitError] = useState('')
   const [editingItemId, setEditingItemId] = useState(null)
   const [retryItemId, setRetryItemId] = useState(null)
+  const [adding, setAdding] = useState(false)
 
   const checkinsByItem = useMemo(() => {
     const map = {}
@@ -213,6 +214,25 @@ export default function ScheduleTab() {
           )
         })}
       </ul>
+      {isLeader && (
+        <div className="schedule-tab__add">
+          {adding ? (
+            <TimetableItemEditForm
+              groupId={bundle.group.id}
+              mapsLoaded={mapsLoaded}
+              onSaved={() => {
+                setAdding(false)
+                refetch()
+              }}
+              onCancel={() => setAdding(false)}
+            />
+          ) : (
+            <button type="button" className="top-action-button" onClick={() => setAdding(true)}>
+              일정 추가
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

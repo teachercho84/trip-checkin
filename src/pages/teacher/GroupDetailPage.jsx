@@ -14,6 +14,7 @@ export default function GroupDetailPage() {
   const mapsLoaded = useGoogleMapsLoaded()
   const { groups, timetableItems, checkins, loading, refetch } = useAllGroupsRealtime()
   const [editingItemId, setEditingItemId] = useState(null)
+  const [adding, setAdding] = useState(false)
   const [deleteGroupInput, setDeleteGroupInput] = useState('')
   const [deletingGroup, setDeletingGroup] = useState(false)
   const [groupError, setGroupError] = useState('')
@@ -138,6 +139,23 @@ export default function GroupDetailPage() {
           )
         })}
       </ul>
+      <div className="group-detail__add">
+        {adding ? (
+          <TimetableItemEditForm
+            groupId={group.id}
+            mapsLoaded={mapsLoaded}
+            onSaved={() => {
+              setAdding(false)
+              refetch()
+            }}
+            onCancel={() => setAdding(false)}
+          />
+        ) : (
+          <button type="button" className="top-action-button" onClick={() => setAdding(true)}>
+            일정 추가
+          </button>
+        )}
+      </div>
 
       <div className="group-detail__danger-zone">
         <h2>모둠 삭제</h2>

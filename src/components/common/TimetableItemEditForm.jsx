@@ -3,30 +3,67 @@ import { supabase } from '../../lib/supabaseClient'
 import { geocodePlaceNames } from '../../lib/excel'
 import './TimetableItemEditForm.css'
 
-/** Inline edit form for one timetable_items row — shared by the teacher's 모둠상세 page and the group leader's 일정 tab. */
-export default function TimetableItemEditForm({ item, hasCheckin, mapsLoaded, onSaved, onCancel }) {
-  const [time, setTime] = useState(item.time_planned?.slice(0, 5) ?? '')
-  const [place, setPlace] = useState(item.place_name)
-  const [task, setTask] = useState(item.task ?? '')
+/**
+ * Inline edit form for one timetable_items row — shared by the teacher's 모둠상세 page and the group leader's 일정 tab.
+ * Pass `item={null}` (with `groupId`) to use it in "add new item" mode instead of editing an existing row.
+ */
+export default function TimetableItemEditForm({ item, groupId, hasCheckin, mapsLoaded, onSaved, onCancel }) {
+  const isAdding = !item
+  const [time, setTime] = useState(item?.time_planned?.slice(0, 5) ?? '')
+  const [place, setPlace] = useState(item?.place_name ?? '')
+  const [task, setTask] = useState(item?.task ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
   async function handleSave() {
+    if (!time || !place) {
+      setError('시간과 장소를 입력해주세요.')
+      return
+    }
+
     setSaving(true)
     setError('')
 
-    const update = { time_planned: time, place_name: place, task: task || null }
+    let lat = null
+    let lng = null
+    let geocodeStatus = 'pending'
 
-    if (place !== item.place_name) {
+    if (isAdding || place !== item.place_name) {
       if (!mapsLoaded) {
         setError('지도를 아직 불러오는 중입니다. 잠시 후 다시 시도해주세요.')
         setSaving(false)
         return
       }
       const geocoded = await geocodePlaceNames([place])
-      update.lat = geocoded[place].lat
-      update.lng = geocoded[place].lng
-      update.geocode_status = geocoded[place].status
+      lat = geocoded[place].lat
+      lng = geocoded[place].lng
+      geocodeStatus = geocoded[place].status
+    }
+
+    if (isAdding) {
+      const { error: insertError } = await supabase.rpc('insert_timetable_item', {
+        p_group_id: groupId,
+        p_time_planned: time,
+        p_place_name: place,
+        p_task: task || null,
+        p_lat: lat,
+        p_lng: lng,
+        p_geocode_status: geocodeStatus,
+      })
+      setSaving(false)
+      if (insertError) {
+        setError(insertError.message)
+        return
+      }
+      onSaved()
+      return
+    }
+
+    const update = { time_planned: time, place_name: place, task: task || null }
+    if (place !== item.place_name) {
+      update.lat = lat
+      update.lng = lng
+      update.geocode_status = geocodeStatus
     }
 
     const { error: updateError } = await supabase.from('timetable_items').update(update).eq('id', item.id)
@@ -51,7 +88,7 @@ export default function TimetableItemEditForm({ item, hasCheckin, mapsLoaded, on
       {error && <p className="timetable-edit-form__error">{error}</p>}
       <div className="timetable-edit-form__actions">
         <button type="button" onClick={handleSave} disabled={saving}>
-          {saving ? '저장 중...' : '저장'}
+          {saving ? (isAdding ? '추가 중...' : '저장 중...') : isAdding ? '추가' : '저장'}
         </button>
         <button type="button" onClick={onCancel} disabled={saving}>
           취소
