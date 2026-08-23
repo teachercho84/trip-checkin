@@ -1,29 +1,33 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { AnnouncementIcon } from './TabIcons'
 import './AnnouncementBanner.css'
 
 export default function AnnouncementBanner() {
-  const [announcement, setAnnouncement] = useState(null)
+  const [announcements, setAnnouncements] = useState([])
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase
-        .from('announcements')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-      setAnnouncement(data ?? null)
+      const { data } = await supabase.from('announcements').select('*').order('created_at', { ascending: false })
+      setAnnouncements(data ?? [])
     }
     load()
   }, [])
 
-  if (!announcement) return null
+  if (announcements.length === 0) return null
 
   return (
-    <div className="announcement-banner">
-      <strong>{announcement.title}</strong>
-      <p>{announcement.body}</p>
+    <div className="announcement-banner-list">
+      {announcements.map((a) => (
+        <div className="announcement-banner" key={a.id}>
+          <div className="announcement-banner__label">
+            <AnnouncementIcon />
+            <span>공지</span>
+          </div>
+          <strong>{a.title}</strong>
+          <p>{a.body}</p>
+        </div>
+      ))}
     </div>
   )
 }
