@@ -67,11 +67,22 @@ export function SettingsIcon() {
   )
 }
 
+export function AnnouncementIcon() {
+  return (
+    <svg {...ICON_PROPS}>
+      <path d="M3 10v4a1.5 1.5 0 0 0 1.5 1.5H6l4.5 4V4.5L6 8.5H4.5A1.5 1.5 0 0 0 3 10z" />
+      <path d="M16.5 8.5a5 5 0 0 1 0 7" />
+      <path d="M19.5 5.5a9.5 9.5 0 0 1 0 13" />
+    </svg>
+  )
+}
+
 export const TAB_ICONS = {
   일정: ScheduleIcon,
   경로: RouteIcon,
   연락처: ContactsIcon,
   현황판: DashboardIcon,
   계획서: ItineraryIcon,
+  공지사항: AnnouncementIcon,
   설정: SettingsIcon,
 }

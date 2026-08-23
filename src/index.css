@@ -530,3 +530,59 @@ a {
 .manual-group-form__result--ok {
   color: var(--success);
 }
+
+.announcement-editor ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.announcement-editor li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.announcement-editor__item-text p {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  white-space: pre-wrap;
+}
+
+.announcement-editor__item-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.announcement-editor__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.announcement-editor__form input,
+.announcement-editor__form textarea {
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.announcement-editor__form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.announcement-editor__form-actions {
+  display: flex;
+  gap: 8px;
+}

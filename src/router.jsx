@@ -12,6 +12,7 @@ import ContactsTab from './pages/student/ContactsTab'
 import DashboardTab from './pages/teacher/DashboardTab'
 import GroupDetailPage from './pages/teacher/GroupDetailPage'
 import ItineraryTab from './pages/teacher/ItineraryTab'
+import AnnouncementsTab from './pages/teacher/AnnouncementsTab'
 import SettingsTab from './pages/teacher/SettingsTab'
 
 export default function AppRouter() {
@@ -45,6 +46,7 @@ export default function AppRouter() {
           <Route path="/teacher/dashboard" element={<DashboardTab />} />
           <Route path="/teacher/dashboard/:groupId" element={<GroupDetailPage />} />
           <Route path="/teacher/itinerary" element={<ItineraryTab />} />
+          <Route path="/teacher/announcements" element={<AnnouncementsTab />} />
           <Route path="/teacher/settings" element={<SettingsTab />} />
         </Route>
       </Routes>

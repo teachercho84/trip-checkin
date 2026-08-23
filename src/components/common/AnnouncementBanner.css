@@ -1,0 +1,20 @@
+.announcement-banner {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.announcement-banner strong {
+  display: block;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.announcement-banner p {
+  margin: 0;
+  font-size: 13px;
+  white-space: pre-wrap;
+  color: var(--text);
+}
