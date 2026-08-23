@@ -6,7 +6,6 @@ import { performCheckin, getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import CameraCapture from '../../components/common/CameraCapture'
 import CheckinStamp from '../../components/common/CheckinStamp'
-import AnnouncementBanner from '../../components/common/AnnouncementBanner'
 import './ScheduleTab.css'
 
 function itemStatus(item, checkinsByItem) {
@@ -97,7 +96,6 @@ export default function ScheduleTab() {
           로그아웃
         </button>
       </div>
-      <AnnouncementBanner />
       {submitError && <p className="schedule-tab__error">{submitError}</p>}
       <ul className="schedule-tab__list">
         {timetable.map((item) => {

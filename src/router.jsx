@@ -9,10 +9,11 @@ import ProtectedRoute from './components/common/ProtectedRoute'
 import ScheduleTab from './pages/student/ScheduleTab'
 import RouteTab from './pages/student/RouteTab'
 import ContactsTab from './pages/student/ContactsTab'
+import StudentAnnouncementsTab from './pages/student/AnnouncementsTab'
 import DashboardTab from './pages/teacher/DashboardTab'
 import GroupDetailPage from './pages/teacher/GroupDetailPage'
 import ItineraryTab from './pages/teacher/ItineraryTab'
-import AnnouncementsTab from './pages/teacher/AnnouncementsTab'
+import TeacherAnnouncementsTab from './pages/teacher/AnnouncementsTab'
 import SettingsTab from './pages/teacher/SettingsTab'
 
 export default function AppRouter() {
@@ -31,6 +32,7 @@ export default function AppRouter() {
             </ProtectedRoute>
           }
         >
+          <Route path="/student/announcements" element={<StudentAnnouncementsTab />} />
           <Route path="/student/schedule" element={<ScheduleTab />} />
           <Route path="/student/route" element={<RouteTab />} />
           <Route path="/student/contacts" element={<ContactsTab />} />
@@ -46,7 +48,7 @@ export default function AppRouter() {
           <Route path="/teacher/dashboard" element={<DashboardTab />} />
           <Route path="/teacher/dashboard/:groupId" element={<GroupDetailPage />} />
           <Route path="/teacher/itinerary" element={<ItineraryTab />} />
-          <Route path="/teacher/announcements" element={<AnnouncementsTab />} />
+          <Route path="/teacher/announcements" element={<TeacherAnnouncementsTab />} />
           <Route path="/teacher/settings" element={<SettingsTab />} />
         </Route>
       </Routes>

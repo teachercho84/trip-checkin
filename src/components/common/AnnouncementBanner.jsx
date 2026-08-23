@@ -14,7 +14,7 @@ export default function AnnouncementBanner() {
     load()
   }, [])
 
-  if (announcements.length === 0) return null
+  if (announcements.length === 0) return <p>등록된 공지사항이 없습니다.</p>
 
   return (
     <div className="announcement-banner-list">
