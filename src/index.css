@@ -493,7 +493,8 @@ a {
 }
 
 .emergency-contacts-editor__form,
-.teacher-account-form form {
+.teacher-account-form form,
+.manual-group-form form {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -502,8 +503,30 @@ a {
 
 .emergency-contacts-editor__form input,
 .emergency-contacts-editor__form select,
-.teacher-account-form input {
+.teacher-account-form input,
+.manual-group-form input {
   padding: 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
+}
+
+.manual-group-form__members {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.manual-group-form__member-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.manual-group-form__member-row input {
+  flex: 1;
+}
+
+.manual-group-form__result--ok {
+  color: var(--success);
 }
