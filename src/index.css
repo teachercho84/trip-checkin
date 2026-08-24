@@ -263,7 +263,7 @@ a {
   font-size: 14px;
   font-weight: 400;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-top: 4px;
 }
 
 .parent-group-list__search {
