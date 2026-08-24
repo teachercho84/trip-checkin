@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useGroupBundle } from '../hooks/useGroupBundle'
 import { getCheckinPhotoUrl } from '../lib/checkin'
 import MapView from '../components/common/MapView'
@@ -8,6 +8,7 @@ import CheckinStamp from '../components/common/CheckinStamp'
 /** Read-only status page for parents: no login, no check-in/edit actions. */
 export default function ParentViewPage() {
   const { accessCode } = useParams()
+  const navigate = useNavigate()
   const { bundle, loading, error } = useGroupBundle(accessCode)
 
   const { items, checkinsByItem, donePoints, upcomingPoints } = useMemo(() => {
@@ -31,6 +32,9 @@ export default function ParentViewPage() {
 
   return (
     <div className="group-detail parent-view">
+      <button type="button" className="group-detail__back" onClick={() => navigate('/p')}>
+        ← 모둠 찾기로 돌아가기
+      </button>
       <h1>{bundle.group.name}</h1>
       <p className="group-detail__leader">모둠장 {bundle.group.leader_name}</p>
       {bundle.members?.length > 0 && (
