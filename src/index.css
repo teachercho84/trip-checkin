@@ -263,13 +263,14 @@ a {
   font-size: 14px;
   font-weight: 400;
   color: var(--text-muted);
-  margin-top: 4px;
+  margin-top: 16px;
+  margin-bottom: 4px;
 }
 
 .parent-group-list__search {
   width: 100%;
   padding: 10px 12px;
-  margin: 12px 0;
+  margin: 0 0 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 14px;

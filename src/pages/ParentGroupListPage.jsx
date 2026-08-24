@@ -24,11 +24,8 @@ export default function ParentGroupListPage() {
 
   return (
     <div className="parent-view parent-group-list">
-      <h1>
-        영산고 문화체험여행
-        <br />
-        <span className="parent-group-list__title-sub">우리 아이 모둠 찾기</span>
-      </h1>
+      <h1>영산고 문화체험여행</h1>
+      <p className="parent-group-list__title-sub">우리 아이 모둠 찾기</p>
       <input
         className="parent-group-list__search"
         type="text"
