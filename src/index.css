@@ -258,6 +258,14 @@ a {
   font-size: 14px;
 }
 
+.parent-group-list__title-sub {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
 .parent-group-list__search {
   width: 100%;
   padding: 10px 12px;
