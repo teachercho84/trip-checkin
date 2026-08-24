@@ -26,7 +26,7 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <h1>수학여행 체크인</h1>
+      <h1>영산고 문화체험여행 체크인</h1>
 
       <div className="login-page__role-toggle">
         <button
