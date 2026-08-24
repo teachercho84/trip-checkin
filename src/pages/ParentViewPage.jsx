@@ -32,10 +32,12 @@ export default function ParentViewPage() {
 
   return (
     <div className="group-detail parent-view">
-      <button type="button" className="group-detail__back" onClick={() => navigate('/p')}>
-        ← 모둠 찾기로 돌아가기
-      </button>
-      <h1>{bundle.group.name}</h1>
+      <div className="page-header">
+        <h1>{bundle.group.name}</h1>
+        <button type="button" className="top-action-button" onClick={() => navigate('/p')}>
+          ← 모둠 찾기
+        </button>
+      </div>
       <p className="group-detail__leader">모둠장 {bundle.group.leader_name}</p>
       {bundle.members?.length > 0 && (
         <p className="group-detail__members">모둠원 {bundle.members.map((m) => m.name).join(', ')}</p>
