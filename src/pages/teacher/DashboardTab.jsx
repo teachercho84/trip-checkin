@@ -43,6 +43,7 @@ export default function DashboardTab() {
   const { logout } = useSession()
   const { groups, timetableItems, checkins, loading } = useAllGroupsRealtime()
   const [parentLinkCopied, setParentLinkCopied] = useState(false)
+  const [studentLinkCopied, setStudentLinkCopied] = useState(false)
   const [filter, setFilter] = useState('all')
 
   async function handleCopyParentLink() {
@@ -50,6 +51,13 @@ export default function DashboardTab() {
     await navigator.clipboard.writeText(link)
     setParentLinkCopied(true)
     setTimeout(() => setParentLinkCopied(false), 2000)
+  }
+
+  async function handleCopyStudentLink() {
+    const link = `${window.location.origin}${import.meta.env.BASE_URL}#/s`
+    await navigator.clipboard.writeText(link)
+    setStudentLinkCopied(true)
+    setTimeout(() => setStudentLinkCopied(false), 2000)
   }
 
   const summaries = useMemo(
@@ -88,6 +96,16 @@ export default function DashboardTab() {
           <input readOnly value={`${window.location.origin}${import.meta.env.BASE_URL}#/p`} onFocus={(e) => e.target.select()} />
           <button type="button" className="top-action-button" onClick={handleCopyParentLink}>
             {parentLinkCopied ? '복사됨' : '복사'}
+          </button>
+        </div>
+      </div>
+
+      <div className="group-detail__parent-link">
+        <span className="group-detail__parent-link-label">학생 공용 링크 (전체 모둠 공용, 1개)</span>
+        <div className="group-detail__parent-link-row">
+          <input readOnly value={`${window.location.origin}${import.meta.env.BASE_URL}#/s`} onFocus={(e) => e.target.select()} />
+          <button type="button" className="top-action-button" onClick={handleCopyStudentLink}>
+            {studentLinkCopied ? '복사됨' : '복사'}
           </button>
         </div>
       </div>

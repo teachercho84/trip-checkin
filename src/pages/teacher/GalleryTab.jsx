@@ -31,7 +31,7 @@ export default function GalleryTab() {
 
   return (
     <div className="gallery-tab">
-      <h1>사진첩</h1>
+      <h1>갤러리</h1>
       {loading ? (
         <p>불러오는 중...</p>
       ) : (

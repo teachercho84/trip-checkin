@@ -96,5 +96,4 @@ export const TAB_ICONS = {
   공지사항: AnnouncementIcon,
   설정: SettingsIcon,
   갤러리: GalleryIcon,
-  사진첩: GalleryIcon,
 }
