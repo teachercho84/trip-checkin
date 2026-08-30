@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
@@ -15,6 +16,7 @@ function itemStatus(item, checkinsByItem) {
 export default function ScheduleTab() {
   const { accessCode, role, logout } = useSession()
   const isLeader = role === 'leader'
+  const navigate = useNavigate()
   const mapsLoaded = useGoogleMapsLoaded()
   const { bundle, loading, error, refetch } = useGroupBundle(accessCode)
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null)
@@ -39,6 +41,14 @@ export default function ScheduleTab() {
     setPhotoFile(blob)
     setPhotoPreviewUrl(URL.createObjectURL(blob))
     setCameraOpen(false)
+  }
+
+  // 모둠장은 이름+비밀번호로 로그인하므로 로그인 화면(/)으로, 일반 학생은 접속코드만
+  // 있는 상태라 모둠을 다시 찾는 공용 페이지(/s)로 보낸다.
+  async function handleLogout() {
+    const wasLeader = isLeader
+    await logout()
+    navigate(wasLeader ? '/' : '/s')
   }
 
   async function handleCheckin(itemId) {
@@ -92,7 +102,7 @@ export default function ScheduleTab() {
     <div className="schedule-tab">
       <div className="page-header">
         <h1>{bundle.group.name} 일정</h1>
-        <button type="button" className="top-action-button" onClick={logout}>
+        <button type="button" className="top-action-button" onClick={handleLogout}>
           로그아웃
         </button>
       </div>
