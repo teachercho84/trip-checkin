@@ -1,18 +1,14 @@
 import { useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useGroupBundle } from '../hooks/useGroupBundle'
+import { useOutletContext } from 'react-router-dom'
 import { getCheckinPhotoUrl } from '../lib/checkin'
 import MapView from '../components/common/MapView'
 import CheckinStamp from '../components/common/CheckinStamp'
 
-/** Read-only status page for parents: no login, no check-in/edit actions. */
-export default function ParentViewPage() {
-  const { accessCode } = useParams()
-  const navigate = useNavigate()
-  const { bundle, loading, error } = useGroupBundle(accessCode)
+/** 학부모용 일정/지도 탭 (읽기 전용, 체크인/수정 액션 없음). */
+export default function ParentScheduleTab() {
+  const { bundle } = useOutletContext()
 
   const { items, checkinsByItem, donePoints, upcomingPoints } = useMemo(() => {
-    if (!bundle) return { items: [], checkinsByItem: {}, donePoints: [], upcomingPoints: [] }
     const checkinsByItem = {}
     for (const c of bundle.checkins) checkinsByItem[c.timetable_item_id] = c
     const items = bundle.timetable
@@ -26,23 +22,8 @@ export default function ParentViewPage() {
     return { items, checkinsByItem, donePoints, upcomingPoints }
   }, [bundle])
 
-  if (!accessCode) return <p>잘못된 접속 링크입니다.</p>
-  if (loading) return <p>불러오는 중...</p>
-  if (error || !bundle) return <p>모둠을 찾을 수 없습니다.</p>
-
   return (
-    <div className="group-detail parent-view">
-      <div className="page-header">
-        <h1>{bundle.group.name}</h1>
-        <button type="button" className="top-action-button" onClick={() => navigate('/p')}>
-          ← 모둠 찾기
-        </button>
-      </div>
-      <p className="group-detail__leader">모둠장 {bundle.group.leader_name}</p>
-      {bundle.members?.length > 0 && (
-        <p className="group-detail__members">모둠원 {bundle.members.map((m) => m.name).join(', ')}</p>
-      )}
-
+    <>
       <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
 
       <ul className="group-detail__timeline">
@@ -77,6 +58,6 @@ export default function ParentViewPage() {
           )
         })}
       </ul>
-    </div>
+    </>
   )
 }

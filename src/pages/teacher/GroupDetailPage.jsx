@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAllGroupsRealtime } from '../../hooks/useAllGroupsRealtime'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
-import { supabase } from '../../lib/supabaseClient'
 import { getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import MapView from '../../components/common/MapView'
@@ -10,14 +9,10 @@ import CheckinStamp from '../../components/common/CheckinStamp'
 
 export default function GroupDetailPage() {
   const { groupId } = useParams()
-  const navigate = useNavigate()
   const mapsLoaded = useGoogleMapsLoaded()
   const { groups, timetableItems, checkins, loading, refetch } = useAllGroupsRealtime()
   const [editingItemId, setEditingItemId] = useState(null)
   const [adding, setAdding] = useState(false)
-  const [deleteGroupInput, setDeleteGroupInput] = useState('')
-  const [deletingGroup, setDeletingGroup] = useState(false)
-  const [groupError, setGroupError] = useState('')
 
   const group = groups.find((g) => g.id === groupId)
   const items = useMemo(
@@ -41,22 +36,6 @@ export default function GroupDetailPage() {
   async function handleDeleteItem(item) {
     const deleted = await deleteTimetableItem(item, Boolean(checkinsByItem[item.id]))
     if (deleted) refetch()
-  }
-
-  async function handleDeleteGroup() {
-    if (deleteGroupInput !== group.name) return
-    if (!window.confirm(`"${group.name}" 모둠을 정말 삭제하시겠습니까? 모둠원, 일정, 체크인 기록이 모두 사라지며 되돌릴 수 없습니다.`)) {
-      return
-    }
-    setDeletingGroup(true)
-    setGroupError('')
-    const { error } = await supabase.from('groups').delete().eq('id', group.id)
-    setDeletingGroup(false)
-    if (error) {
-      setGroupError(error.message)
-      return
-    }
-    navigate('/teacher/dashboard')
   }
 
   if (loading) return <p>불러오는 중...</p>
@@ -155,25 +134,6 @@ export default function GroupDetailPage() {
             일정 추가
           </button>
         )}
-      </div>
-
-      <div className="group-detail__danger-zone">
-        <h2>모둠 삭제</h2>
-        <p>이 모둠과 모둠원, 일정, 체크인 기록을 전부 삭제합니다. 되돌릴 수 없습니다.</p>
-        <p>
-          삭제하려면 모둠명 <strong>{group.name}</strong>을(를) 아래에 입력하세요.
-        </p>
-        <div className="group-detail__danger-zone-form">
-          <input value={deleteGroupInput} onChange={(e) => setDeleteGroupInput(e.target.value)} placeholder={group.name} />
-          <button
-            type="button"
-            onClick={handleDeleteGroup}
-            disabled={deleteGroupInput !== group.name || deletingGroup}
-          >
-            {deletingGroup ? '삭제 중...' : '모둠 삭제'}
-          </button>
-        </div>
-        {groupError && <p className="excel-uploader__error">{groupError}</p>}
       </div>
     </div>
   )

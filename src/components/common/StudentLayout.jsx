@@ -5,6 +5,7 @@ const TABS = [
   { to: '/student/announcements', label: '공지사항' },
   { to: '/student/schedule', label: '일정' },
   { to: '/student/route', label: '경로' },
+  { to: '/student/gallery', label: '갤러리' },
   { to: '/student/contacts', label: '연락처' },
 ]
 

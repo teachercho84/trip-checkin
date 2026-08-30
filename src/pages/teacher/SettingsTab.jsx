@@ -1,5 +1,6 @@
 import ExcelUploader from '../../components/teacher/ExcelUploader'
 import ManualGroupForm from '../../components/teacher/ManualGroupForm'
+import GroupDeleteForm from '../../components/teacher/GroupDeleteForm'
 import EmergencyContactsEditor from '../../components/teacher/EmergencyContactsEditor'
 import TeacherAccountForm from '../../components/teacher/TeacherAccountForm'
 import { useSession } from '../../context/SessionContext'
@@ -13,6 +14,8 @@ export default function SettingsTab() {
       <ExcelUploader />
       <hr />
       <ManualGroupForm />
+      <hr />
+      <GroupDeleteForm />
       <hr />
       <EmergencyContactsEditor />
       <hr />

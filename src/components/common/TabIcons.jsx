@@ -77,6 +77,16 @@ export function AnnouncementIcon() {
   )
 }
 
+export function GalleryIcon() {
+  return (
+    <svg {...ICON_PROPS}>
+      <rect x="3" y="4.5" width="18" height="15" rx="2" />
+      <circle cx="8.5" cy="9.5" r="1.8" />
+      <path d="M3 16.5l5.5-5 4 3.5 3-2.5 5.5 4.5" />
+    </svg>
+  )
+}
+
 export const TAB_ICONS = {
   일정: ScheduleIcon,
   경로: RouteIcon,
@@ -85,4 +95,6 @@ export const TAB_ICONS = {
   계획서: ItineraryIcon,
   공지사항: AnnouncementIcon,
   설정: SettingsIcon,
+  갤러리: GalleryIcon,
+  사진첩: GalleryIcon,
 }

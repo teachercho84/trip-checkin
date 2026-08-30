@@ -1,0 +1,129 @@
+.gallery-grid__mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.gallery-grid__mode-tabs button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+
+.gallery-grid__mode-tabs button.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.gallery-grid__group-select {
+  display: block;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.gallery-grid__error {
+  color: var(--danger);
+  margin-bottom: 8px;
+}
+
+.gallery-grid__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+}
+
+.gallery-grid__section-title {
+  font-size: 15px;
+  margin: 16px 0 8px;
+  color: var(--text);
+}
+
+.gallery-grid__item {
+  position: relative;
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.gallery-grid__rank {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 1;
+}
+
+.gallery-grid__thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.gallery-grid__delete {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(28, 43, 69, 0.55);
+  color: #fff;
+  line-height: 1;
+  font-size: 16px;
+}
+
+.gallery-grid__caption {
+  padding: 6px 8px 8px;
+}
+
+.gallery-grid__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.gallery-grid__meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.gallery-grid__like {
+  display: block;
+  width: 100%;
+  padding: 4px 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.gallery-grid__like.is-liked {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.gallery-grid__empty {
+  grid-column: 1 / -1;
+  color: var(--text-muted);
+}
