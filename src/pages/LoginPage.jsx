@@ -1,14 +1,23 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { loginWithDisplayName } from '../lib/auth'
+import { useSession } from '../context/SessionContext'
 
 export default function LoginPage() {
+  const { role: sessionRole, loading: sessionLoading } = useSession()
   const [role, setRole] = useState('teacher') // 'teacher' | 'group_leader'
   const [displayName, setDisplayName] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
+
+  // 이미 세션(접속코드/로그인)이 남아있는 상태로 이 페이지에 오면 로그인 폼 대신
+  // 원래 화면으로 바로 돌려보낸다 — 사진 라이브러리를 열었다가 안드로이드가 PWA를
+  // 재시작하면서 시작 주소(/)로 떨어지는 경우 등, 로그인 화면이 잘못 뜨는 걸 방지.
+  if (sessionLoading) return null
+  if (sessionRole === 'teacher') return <Navigate to="/teacher/dashboard" replace />
+  if (sessionRole === 'student' || sessionRole === 'leader') return <Navigate to="/student/schedule" replace />
 
   async function handleSubmit(e) {
     e.preventDefault()
