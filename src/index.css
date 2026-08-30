@@ -23,6 +23,8 @@ body {
   font-family: var(--sans);
   color: var(--text);
   background: var(--bg);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 #root {
