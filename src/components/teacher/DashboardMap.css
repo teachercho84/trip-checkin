@@ -1,0 +1,23 @@
+.dashboard-map__locate-btn {
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.dashboard-map__locate-btn:hover {
+  color: var(--accent);
+}
+
+.dashboard-map__locate-btn.is-locating {
+  opacity: 0.6;
+  pointer-events: none;
+}
