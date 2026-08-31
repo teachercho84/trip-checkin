@@ -7,7 +7,13 @@ import './DashboardMap.css'
 
 const CONTAINER_STYLE = { width: '100%', height: '280px', borderRadius: '16px' }
 const DEFAULT_CENTER = { lat: 37.5665, lng: 126.978 }
-const MAP_OPTIONS = { streetViewControl: false, zoomControl: false, rotateControl: false, panControl: false }
+const MAP_OPTIONS = {
+  streetViewControl: false,
+  zoomControl: false,
+  rotateControl: false,
+  panControl: false,
+  cameraControl: false,
+}
 const LOCATE_ICON_SVG = `
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
     <circle cx="12" cy="12" r="8"></circle>
