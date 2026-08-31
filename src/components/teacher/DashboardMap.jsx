@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { GoogleMap } from '@react-google-maps/api'
 import { MarkerClusterer } from '@googlemaps/markerclusterer'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
@@ -7,7 +7,7 @@ import './DashboardMap.css'
 
 const CONTAINER_STYLE = { width: '100%', height: '280px', borderRadius: '16px' }
 const DEFAULT_CENTER = { lat: 37.5665, lng: 126.978 }
-const MAP_OPTIONS = { streetViewControl: false }
+const MAP_OPTIONS = { streetViewControl: false, zoomControl: false }
 const LOCATE_ICON_SVG = `
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="7"></circle>
@@ -24,6 +24,17 @@ export default function DashboardMap({ points }) {
   const isLoaded = useGoogleMapsLoaded()
   const [map, setMap] = useState(null)
   const [myLocation, setMyLocation] = useState(null)
+
+  // Memoized so its object identity only changes when the actual coordinates do —
+  // @react-google-maps/api re-applies `center` via map.setCenter() whenever the
+  // prop's reference changes, which would otherwise snap the map back on every
+  // re-render (e.g. right after panTo() from the locate button, via setMyLocation).
+  const firstLat = points[0]?.lat
+  const firstLng = points[0]?.lng
+  const center = useMemo(
+    () => (firstLat != null && firstLng != null ? { lat: firstLat, lng: firstLng } : DEFAULT_CENTER),
+    [firstLat, firstLng],
+  )
 
   useEffect(() => {
     // `map` becomes non-null only once GoogleMap's onLoad fires (via state, not a
@@ -135,8 +146,6 @@ export default function DashboardMap({ points }) {
   }, [map, myLocation])
 
   if (!isLoaded) return <div style={CONTAINER_STYLE}>지도를 불러오는 중...</div>
-
-  const center = points[0] ? { lat: points[0].lat, lng: points[0].lng } : DEFAULT_CENTER
 
   return (
     <GoogleMap
