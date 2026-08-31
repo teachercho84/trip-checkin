@@ -9,13 +9,9 @@ const CONTAINER_STYLE = { width: '100%', height: '280px', borderRadius: '16px' }
 const DEFAULT_CENTER = { lat: 37.5665, lng: 126.978 }
 const MAP_OPTIONS = { streetViewControl: false, zoomControl: false, rotateControl: false, panControl: false }
 const LOCATE_ICON_SVG = `
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="7"></circle>
-    <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"></circle>
-    <line x1="12" y1="2" x2="12" y2="5"></line>
-    <line x1="12" y1="19" x2="12" y2="22"></line>
-    <line x1="2" y1="12" x2="5" y2="12"></line>
-    <line x1="19" y1="12" x2="22" y2="12"></line>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <circle cx="12" cy="12" r="8"></circle>
+    <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"></circle>
   </svg>
 `
 
