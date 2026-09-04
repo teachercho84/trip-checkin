@@ -2,6 +2,13 @@ import { GoogleMap, Marker, Polyline } from '@react-google-maps/api'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 
 const CONTAINER_STYLE = { width: '100%', height: '320px', borderRadius: '16px' }
+const MAP_OPTIONS = {
+  streetViewControl: false,
+  zoomControl: false,
+  rotateControl: false,
+  panControl: false,
+  cameraControl: false,
+}
 
 /**
  * Renders a group's checked-in points as numbered markers connected by a
@@ -16,7 +23,7 @@ export default function MapView({ donePoints = [], upcomingPoints = [], center }
   const mapCenter = center ?? donePoints[0] ?? upcomingPoints[0] ?? { lat: 37.5665, lng: 126.978 }
 
   return (
-    <GoogleMap mapContainerStyle={CONTAINER_STYLE} center={mapCenter} zoom={13}>
+    <GoogleMap mapContainerStyle={CONTAINER_STYLE} center={mapCenter} zoom={13} options={MAP_OPTIONS}>
       {donePoints.map((p, i) => (
         <Marker
           key={`done-${i}`}
