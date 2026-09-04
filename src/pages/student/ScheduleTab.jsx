@@ -25,7 +25,7 @@ export default function ScheduleTab() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [editingItemId, setEditingItemId] = useState(null)
-  const [retryItemId, setRetryItemId] = useState(null)
+  const [activeItemId, setActiveItemId] = useState(null)
   const [adding, setAdding] = useState(false)
 
   const checkinsByItem = useMemo(() => {
@@ -35,7 +35,16 @@ export default function ScheduleTab() {
   }, [bundle])
 
   const timetable = bundle?.timetable ?? []
-  const currentItem = timetable.find((item) => itemStatus(item, checkinsByItem) === 'pending')
+
+  // 순서와 무관하게 아무 항목이나 체크인할 수 있다. 다만 "지금 이 시간대에 체크인해야
+  // 할 항목"을 안내하기 위해, 아직 체크인 안 됐고 예정 시각이 이미 지난 항목 중
+  // 가장 최근 것을 활성 항목으로 표시한다 (앞선 일정을 건너뛰었어도 최신 것을 우선 안내).
+  const now = new Date(`1970-01-01T${new Date().toTimeString().slice(0, 8)}`)
+  let activeTimeItemId = null
+  for (const item of timetable) {
+    if (checkinsByItem[item.id]) continue
+    if (new Date(`1970-01-01T${item.time_planned}`) <= now) activeTimeItemId = item.id
+  }
 
   function handlePhotoCapture(blob) {
     setPhotoFile(blob)
@@ -64,7 +73,7 @@ export default function ScheduleTab() {
       })
       setPhotoFile(null)
       setPhotoPreviewUrl(null)
-      setRetryItemId(null)
+      setActiveItemId(null)
       await refetch()
     } catch (err) {
       setSubmitError(err.message ?? '체크인에 실패했습니다.')
@@ -73,20 +82,24 @@ export default function ScheduleTab() {
     }
   }
 
-  function handleStartRetry(item) {
-    if (!window.confirm('다시 체크인하면 이전 사진은 사라져요. 계속할까요?')) return
+  function handleStartCapture(itemId) {
     setPhotoFile(null)
     setPhotoPreviewUrl(null)
-    setCameraOpen(false)
     setSubmitError('')
-    setRetryItemId(item.id)
+    setActiveItemId(itemId)
+    setCameraOpen(true)
   }
 
-  function handleCancelRetry() {
+  function handleStartRetry(item) {
+    if (!window.confirm('다시 체크인하면 이전 사진은 사라져요. 계속할까요?')) return
+    handleStartCapture(item.id)
+  }
+
+  function handleCancelCapture() {
     setPhotoFile(null)
     setPhotoPreviewUrl(null)
     setCameraOpen(false)
-    setRetryItemId(null)
+    setActiveItemId(null)
   }
 
   async function handleDeleteItem(item) {
@@ -110,10 +123,10 @@ export default function ScheduleTab() {
       <ul className="schedule-tab__list">
         {timetable.map((item) => {
           const status = itemStatus(item, checkinsByItem)
-          const isCurrent = item.id === currentItem?.id
+          const isActiveTime = item.id === activeTimeItemId
+          const isPastDue = status === 'pending' && new Date(`1970-01-01T${item.time_planned}`) <= now
           const checkin = checkinsByItem[item.id]
-          const isRetrying = retryItemId === item.id
-          const showCheckinAction = isCurrent || isRetrying
+          const isCapturing = activeItemId === item.id
 
           if (isLeader && editingItemId === item.id) {
             return (
@@ -138,8 +151,8 @@ export default function ScheduleTab() {
               className={
                 'schedule-tab__item' +
                 (status === 'done' ? ' is-done' : '') +
-                (isCurrent ? ' is-current' : '') +
-                (!isCurrent && status === 'pending' ? ' is-upcoming' : '')
+                (isActiveTime && status === 'pending' ? ' is-current' : '') +
+                (status === 'pending' && !isPastDue ? ' is-upcoming' : '')
               }
             >
               <div className="schedule-tab__item-time">{item.time_planned?.slice(0, 5)}</div>
@@ -156,7 +169,7 @@ export default function ScheduleTab() {
                     </button>
                   </div>
                 )}
-                {status === 'done' && !isRetrying && (
+                {status === 'done' && !isCapturing && (
                   <>
                     <CheckinStamp
                       time={new Date(checkin.checked_in_at).toLocaleTimeString('ko-KR', {
@@ -186,10 +199,17 @@ export default function ScheduleTab() {
                     </div>
                   </>
                 )}
-                {!isCurrent && status === 'pending' && (
+                {status === 'pending' && !isPastDue && (
                   <div className="schedule-tab__item-upcoming">예정</div>
                 )}
-                {showCheckinAction && (
+                {status === 'pending' && isPastDue && !isCapturing && (
+                  <div className="schedule-tab__item-actions">
+                    <button type="button" onClick={() => handleStartCapture(item.id)}>
+                      사진 찍기
+                    </button>
+                  </div>
+                )}
+                {isCapturing && (
                   <div className="schedule-tab__item-actions">
                     {cameraOpen ? (
                       <CameraCapture onCapture={handlePhotoCapture} onCancel={() => setCameraOpen(false)} />
@@ -209,11 +229,9 @@ export default function ScheduleTab() {
                           >
                             {submitting ? '체크인 중...' : '체크인하기'}
                           </button>
-                          {isRetrying && (
-                            <button type="button" onClick={handleCancelRetry} disabled={submitting}>
-                              취소
-                            </button>
-                          )}
+                          <button type="button" onClick={handleCancelCapture} disabled={submitting}>
+                            취소
+                          </button>
                         </div>
                       </>
                     )}
