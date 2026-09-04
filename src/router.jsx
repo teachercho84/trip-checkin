@@ -37,7 +37,7 @@ export default function AppRouter() {
 
         <Route
           element={
-            <ProtectedRoute allow={['student', 'leader']}>
+            <ProtectedRoute allow={['student', 'leader', 'viewer']}>
               <StudentLayout />
             </ProtectedRoute>
           }

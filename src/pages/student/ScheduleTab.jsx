@@ -16,6 +16,9 @@ function itemStatus(item, checkinsByItem) {
 export default function ScheduleTab() {
   const { accessCode, role, logout } = useSession()
   const isLeader = role === 'leader'
+  // /s(공용 모둠 찾기)로 들어온 viewer는 본인 모둠인지 확인할 방법이 없어 체크인은 못 하고
+  // 조회만 가능하다.
+  const canCheckin = role !== 'viewer'
   const navigate = useNavigate()
   const mapsLoaded = useGoogleMapsLoaded()
   const { bundle, loading, error, refetch } = useGroupBundle(accessCode)
@@ -192,24 +195,29 @@ export default function ScheduleTab() {
                         </a>
                       </div>
                     )}
-                    <div className="schedule-tab__item-edit-actions">
-                      <button type="button" onClick={() => handleStartRetry(item)}>
-                        다시 체크인
-                      </button>
-                    </div>
+                    {canCheckin && (
+                      <div className="schedule-tab__item-edit-actions">
+                        <button type="button" onClick={() => handleStartRetry(item)}>
+                          다시 체크인
+                        </button>
+                      </div>
+                    )}
                   </>
                 )}
                 {status === 'pending' && !isPastDue && (
                   <div className="schedule-tab__item-upcoming">예정</div>
                 )}
-                {status === 'pending' && isPastDue && !isCapturing && (
+                {status === 'pending' && isPastDue && !canCheckin && (
+                  <div className="schedule-tab__item-upcoming">미체크인</div>
+                )}
+                {status === 'pending' && isPastDue && canCheckin && !isCapturing && (
                   <div className="schedule-tab__item-actions">
                     <button type="button" onClick={() => handleStartCapture(item.id)}>
                       사진 찍기
                     </button>
                   </div>
                 )}
-                {isCapturing && (
+                {canCheckin && isCapturing && (
                   <div className="schedule-tab__item-actions">
                     {cameraOpen ? (
                       <CameraCapture onCapture={handlePhotoCapture} onCancel={() => setCameraOpen(false)} />

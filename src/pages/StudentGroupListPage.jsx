@@ -24,8 +24,10 @@ export default function StudentGroupListPage() {
   if (loading) return <p>불러오는 중...</p>
   if (error) return <p>모둠 목록을 불러올 수 없습니다.</p>
 
+  // 검색해서 들어오는 경로라 본인 모둠인지 확인할 방법이 없다 — 체크인 등 쓰기
+  // 액션은 막고 조회 전용(viewer)으로 들어가게 한다.
   function handleSelect(group) {
-    setAccessCode(group.access_code)
+    setAccessCode(group.access_code, { viewer: true })
     navigate('/student/schedule')
   }
 

@@ -2,25 +2,30 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 import { supabase } from '../lib/supabaseClient'
 
 const ACCESS_CODE_KEY = 'p10_access_code'
+const VIEWER_KEY = 'p10_viewer'
 
 const SessionContext = createContext(null)
 
 export function SessionProvider({ children }) {
   const [accessCode, setAccessCodeState] = useState(() => localStorage.getItem(ACCESS_CODE_KEY))
   const [authSession, setAuthSession] = useState(null)
-  const [role, setRole] = useState(null) // 'student' | 'leader' | 'teacher'
+  const [role, setRole] = useState(null) // 'student' | 'leader' | 'teacher' | 'viewer'
   const [groupId, setGroupId] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const setAccessCode = useCallback((code) => {
+  // viewer: /s(공용 모둠 찾기)에서 들어온 경우 — 본인 모둠인지 확인할 방법이 없으므로
+  // 체크인 등 쓰기 액션은 못 하고 조회 + 갤러리 업로드만 가능하다.
+  const setAccessCode = useCallback((code, { viewer = false } = {}) => {
     localStorage.setItem(ACCESS_CODE_KEY, code)
+    if (viewer) localStorage.setItem(VIEWER_KEY, '1')
+    else localStorage.removeItem(VIEWER_KEY)
     setAccessCodeState(code)
-    setRole('student')
+    setRole(viewer ? 'viewer' : 'student')
   }, [])
 
   const resolveAuthRole = useCallback(async (session) => {
     if (!session) {
-      setRole(accessCode ? 'student' : null)
+      setRole(accessCode ? (localStorage.getItem(VIEWER_KEY) ? 'viewer' : 'student') : null)
       setGroupId(null)
       return
     }
@@ -68,6 +73,7 @@ export function SessionProvider({ children }) {
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
     localStorage.removeItem(ACCESS_CODE_KEY)
+    localStorage.removeItem(VIEWER_KEY)
     setAccessCodeState(null)
     setRole(null)
     setGroupId(null)
