@@ -1,5 +1,6 @@
 import ExcelUploader from '../../components/teacher/ExcelUploader'
 import ManualGroupForm from '../../components/teacher/ManualGroupForm'
+import GroupMemberAddForm from '../../components/teacher/GroupMemberAddForm'
 import GroupDeleteForm from '../../components/teacher/GroupDeleteForm'
 import EmergencyContactsEditor from '../../components/teacher/EmergencyContactsEditor'
 import TeacherAccountForm from '../../components/teacher/TeacherAccountForm'
@@ -14,6 +15,8 @@ export default function SettingsTab() {
       <ExcelUploader />
       <hr />
       <ManualGroupForm />
+      <hr />
+      <GroupMemberAddForm />
       <hr />
       <GroupDeleteForm />
       <hr />

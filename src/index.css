@@ -509,7 +509,8 @@ a {
 
 .emergency-contacts-editor__form,
 .teacher-account-form form,
-.manual-group-form form {
+.manual-group-form form,
+.group-member-add-form form {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -519,26 +520,31 @@ a {
 .emergency-contacts-editor__form input,
 .emergency-contacts-editor__form select,
 .teacher-account-form input,
-.manual-group-form input {
+.manual-group-form input,
+.group-member-add-form input,
+.group-member-add-form select {
   padding: 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
 }
 
-.manual-group-form__members {
+.manual-group-form__members,
+.group-member-add-form__members {
   display: flex;
   flex-direction: column;
   gap: 6px;
   width: 100%;
 }
 
-.manual-group-form__member-row {
+.manual-group-form__member-row,
+.group-member-add-form__member-row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.manual-group-form__member-row input {
+.manual-group-form__member-row input,
+.group-member-add-form__member-row input {
   flex: 1;
 }
 
