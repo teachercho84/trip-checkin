@@ -1,5 +1,6 @@
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
+import { useInvalidAccessCodeRecovery } from '../../hooks/useInvalidAccessCodeRecovery'
 import PhoneLink from '../../components/common/PhoneLink'
 
 const CATEGORY_LABEL = {
@@ -10,6 +11,7 @@ const CATEGORY_LABEL = {
 export default function ContactsTab() {
   const { accessCode } = useSession()
   const { bundle, loading, error } = useGroupBundle(accessCode)
+  useInvalidAccessCodeRecovery(error)
 
   if (!accessCode) return <p>접속 코드가 없습니다. 모둠 링크로 다시 접속해주세요.</p>
   if (loading) return <p>불러오는 중...</p>

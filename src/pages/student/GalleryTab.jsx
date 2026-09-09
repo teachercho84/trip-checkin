@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
+import { useInvalidAccessCodeRecovery } from '../../hooks/useInvalidAccessCodeRecovery'
 import { fetchGalleryPhotos, uploadGalleryPhoto } from '../../lib/gallery'
 import CameraCapture from '../../components/common/CameraCapture'
 import GalleryGrid from '../../components/common/GalleryGrid'
@@ -8,7 +9,8 @@ import './GalleryTab.css'
 
 export default function GalleryTab() {
   const { accessCode, role, groupId } = useSession()
-  const { bundle } = useGroupBundle(accessCode)
+  const { bundle, error: bundleError } = useGroupBundle(accessCode)
+  useInvalidAccessCodeRecovery(bundleError)
   const fileInputRef = useRef(null)
 
   const [photos, setPhotos] = useState([])

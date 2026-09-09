@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
+import { useInvalidAccessCodeRecovery } from '../../hooks/useInvalidAccessCodeRecovery'
 import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 import { performCheckin, getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
@@ -22,6 +23,7 @@ export default function ScheduleTab() {
   const navigate = useNavigate()
   const mapsLoaded = useGoogleMapsLoaded()
   const { bundle, loading, error, refetch } = useGroupBundle(accessCode)
+  useInvalidAccessCodeRecovery(error)
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null)
   const [photoFile, setPhotoFile] = useState(null)
   const [cameraOpen, setCameraOpen] = useState(false)

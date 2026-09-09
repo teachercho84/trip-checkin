@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
 import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
+import { useInvalidAccessCodeRecovery } from '../../hooks/useInvalidAccessCodeRecovery'
 import MapView from '../../components/common/MapView'
 
 export default function RouteTab() {
   const { accessCode } = useSession()
   const { bundle, loading, error } = useGroupBundle(accessCode)
+  useInvalidAccessCodeRecovery(error)
 
   const { donePoints, upcomingPoints, orderedCheckins } = useMemo(() => {
     if (!bundle) return { donePoints: [], upcomingPoints: [], orderedCheckins: [] }
