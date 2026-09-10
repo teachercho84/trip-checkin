@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router-dom'
 import BottomTabBar from './BottomTabBar'
+import { AnnouncementsProvider, useAnnouncements } from '../../context/AnnouncementsContext'
 
-const TABS = [
+const BASE_TABS = [
   { to: '/student/announcements', label: '공지사항' },
   { to: '/student/schedule', label: '일정' },
   { to: '/student/route', label: '경로' },
@@ -9,13 +10,24 @@ const TABS = [
   { to: '/student/contacts', label: '연락처' },
 ]
 
-export default function StudentLayout() {
+function StudentLayoutInner() {
+  const { hasUnread } = useAnnouncements()
+  const tabs = BASE_TABS.map((tab) => (tab.label === '공지사항' ? { ...tab, badge: hasUnread } : tab))
+
   return (
     <div className="layout">
       <main className="layout__content">
         <Outlet />
       </main>
-      <BottomTabBar tabs={TABS} />
+      <BottomTabBar tabs={tabs} />
     </div>
+  )
+}
+
+export default function StudentLayout() {
+  return (
+    <AnnouncementsProvider>
+      <StudentLayoutInner />
+    </AnnouncementsProvider>
   )
 }

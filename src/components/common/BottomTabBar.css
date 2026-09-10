@@ -36,3 +36,19 @@
   color: var(--accent);
   font-weight: 600;
 }
+
+.bottom-tab-bar__icon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.bottom-tab-bar__badge {
+  position: absolute;
+  top: -1px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ea4335;
+  border: 1.5px solid var(--surface);
+}

@@ -27,6 +27,15 @@
   height: 14px;
 }
 
+.announcement-banner__new {
+  background: #ea4335;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
 .announcement-banner strong {
   display: block;
   margin-bottom: 4px;

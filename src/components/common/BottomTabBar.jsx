@@ -14,7 +14,10 @@ export default function BottomTabBar({ tabs }) {
             className={({ isActive }) => 'bottom-tab-bar__item' + (isActive ? ' is-active' : '')}
           >
             <span className="bottom-tab-bar__pill">
-              {Icon && <Icon />}
+              <span className="bottom-tab-bar__icon-wrap">
+                {Icon && <Icon />}
+                {tab.badge && <span className="bottom-tab-bar__badge" aria-label="읽지 않은 알림" />}
+              </span>
               <span>{tab.label}</span>
             </span>
           </NavLink>

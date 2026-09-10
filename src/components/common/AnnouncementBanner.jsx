@@ -1,18 +1,15 @@
-import { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabaseClient'
+import { useEffect } from 'react'
 import { AnnouncementIcon } from './TabIcons'
+import { useAnnouncements } from '../../context/AnnouncementsContext'
 import './AnnouncementBanner.css'
 
 export default function AnnouncementBanner() {
-  const [announcements, setAnnouncements] = useState([])
+  const { announcements, isUnread, markAllRead } = useAnnouncements()
 
+  // 학생이 이 탭을 열어 목록을 보는 시점 = 읽은 것으로 처리.
   useEffect(() => {
-    async function load() {
-      const { data } = await supabase.from('announcements').select('*').order('created_at', { ascending: false })
-      setAnnouncements(data ?? [])
-    }
-    load()
-  }, [])
+    markAllRead()
+  }, [announcements, markAllRead])
 
   if (announcements.length === 0) return <p>등록된 공지사항이 없습니다.</p>
 
@@ -23,6 +20,7 @@ export default function AnnouncementBanner() {
           <div className="announcement-banner__label">
             <AnnouncementIcon />
             <span>공지</span>
+            {isUnread(a) && <span className="announcement-banner__new">NEW</span>}
           </div>
           <strong>{a.title}</strong>
           <p>{a.body}</p>
