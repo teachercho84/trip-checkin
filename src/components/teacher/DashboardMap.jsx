@@ -48,21 +48,26 @@ export default function DashboardMap({ points }) {
     // actually exists, instead of possibly running once too early and never again.
     if (!map) return
 
-    const markers = points.map(
-      (p) =>
-        new window.google.maps.Marker({
-          position: { lat: p.lat, lng: p.lng },
-          title: p.label,
-          icon: {
-            path: window.google.maps.SymbolPath.CIRCLE,
-            scale: 8,
-            fillColor: '#ff7a59',
-            fillOpacity: 1,
-            strokeColor: '#fff',
-            strokeWeight: 2,
-          },
-        }),
-    )
+    const infoWindow = new window.google.maps.InfoWindow()
+    const markers = points.map((p) => {
+      const marker = new window.google.maps.Marker({
+        position: { lat: p.lat, lng: p.lng },
+        title: p.label,
+        icon: {
+          path: window.google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: p.isDelayedNow ? '#ea4335' : '#34a853',
+          fillOpacity: 1,
+          strokeColor: '#fff',
+          strokeWeight: 2,
+        },
+      })
+      marker.addListener('click', () => {
+        infoWindow.setContent(p.label)
+        infoWindow.open({ map, anchor: marker })
+      })
+      return marker
+    })
     const clusterer = new MarkerClusterer({
       map,
       markers,
@@ -85,6 +90,7 @@ export default function DashboardMap({ points }) {
 
     return () => {
       clusterer.clearMarkers()
+      infoWindow.close()
     }
   }, [map, points])
 

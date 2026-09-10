@@ -64,7 +64,12 @@ export default function DashboardTab() {
 
   const mapPoints = summaries
     .filter((s) => s.position)
-    .map((s) => ({ lat: s.position.lat, lng: s.position.lng, label: s.group.name }))
+    .map((s) => ({
+      lat: s.position.lat,
+      lng: s.position.lng,
+      label: s.group.name,
+      isDelayedNow: s.isDelayedNow,
+    }))
 
   const totalGroups = groups.length
   const doneCount = summaries.filter((s) => s.total > 0 && !s.isDelayedNow).length
