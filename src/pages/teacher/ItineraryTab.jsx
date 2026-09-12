@@ -41,7 +41,8 @@ export default function ItineraryTab() {
       {selectedGroup && (
         <div className="itinerary-tab__header">
           <p>
-            모둠장 {selectedGroup.leader_name} · {selectedGroup.leader_phone}
+            모둠장 {selectedGroup.leader_name} ·{' '}
+            <a href={`tel:${selectedGroup.leader_phone?.replace(/-/g, '')}`}>{selectedGroup.leader_phone}</a>
           </p>
           <p>모둠원 {members.map((m) => m.name).join(', ')}</p>
         </div>

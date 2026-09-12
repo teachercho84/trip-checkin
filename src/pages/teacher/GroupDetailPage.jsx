@@ -50,7 +50,8 @@ export default function GroupDetailPage() {
         </Link>
       </div>
       <p className="group-detail__leader">
-        모둠장 {group.leader_name} · {group.leader_phone}
+        모둠장 {group.leader_name} ·{' '}
+        <a href={`tel:${group.leader_phone?.replace(/-/g, '')}`}>{group.leader_phone}</a>
       </p>
 
       <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
