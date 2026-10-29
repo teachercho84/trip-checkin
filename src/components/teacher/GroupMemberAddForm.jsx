@@ -8,17 +8,86 @@ export default function GroupMemberAddForm() {
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState(null) // { status: 'ok', groupName, count } | null
   const [error, setError] = useState('')
+  const [currentMembers, setCurrentMembers] = useState([]) // [{ id, name }]
+  const [editingId, setEditingId] = useState(null)
+  const [editName, setEditName] = useState('')
+  const [busyId, setBusyId] = useState(null)
 
   async function loadGroups() {
     const { data } = await supabase.from('groups').select('id, name').order('name')
     setGroups(data ?? [])
   }
 
+  async function loadMembers(groupId) {
+    if (!groupId) {
+      setCurrentMembers([])
+      return
+    }
+    const { data, error: loadError } = await supabase
+      .from('group_members')
+      .select('id, name')
+      .eq('group_id', groupId)
+      .order('name')
+    if (loadError) {
+      setError(`모둠원 목록을 불러오지 못했습니다: ${loadError.message}`)
+      return
+    }
+    setCurrentMembers(data ?? [])
+  }
+
   useEffect(() => {
     loadGroups()
   }, [])
 
+  useEffect(() => {
+    setEditingId(null)
+    loadMembers(selectedGroupId)
+  }, [selectedGroupId])
+
   const selectedGroup = groups.find((g) => g.id === selectedGroupId)
+
+  function startEdit(member) {
+    setEditingId(member.id)
+    setEditName(member.name)
+    setError('')
+    setResult(null)
+  }
+
+  async function saveEdit(member) {
+    const newName = editName.trim()
+    if (!newName) return
+    if (newName === member.name) {
+      setEditingId(null)
+      return
+    }
+    setBusyId(member.id)
+    setError('')
+    const { error: updateError } = await supabase
+      .from('group_members')
+      .update({ name: newName })
+      .eq('id', member.id)
+    setBusyId(null)
+    if (updateError) {
+      setError(`수정 실패: ${updateError.message}`)
+      return
+    }
+    setEditingId(null)
+    await loadMembers(selectedGroupId)
+  }
+
+  async function deleteMember(member) {
+    if (!window.confirm(`"${member.name}" 학생을 "${selectedGroup?.name}" 모둠에서 뺄까요?`)) return
+    setBusyId(member.id)
+    setError('')
+    setResult(null)
+    const { error: deleteError } = await supabase.from('group_members').delete().eq('id', member.id)
+    setBusyId(null)
+    if (deleteError) {
+      setError(`삭제 실패: ${deleteError.message}`)
+      return
+    }
+    await loadMembers(selectedGroupId)
+  }
 
   function updateMember(index, value) {
     setMembers((prev) => prev.map((m, i) => (i === index ? value : m)))
@@ -73,6 +142,7 @@ export default function GroupMemberAddForm() {
 
       setResult({ status: 'ok', groupName: selectedGroup?.name, count: cleanMembers.length })
       setMembers([''])
+      await loadMembers(selectedGroupId)
     } finally {
       setSubmitting(false)
     }
@@ -80,8 +150,8 @@ export default function GroupMemberAddForm() {
 
   return (
     <div className="group-member-add-form">
-      <h2>모둠원 추가</h2>
-      <p>기존 모둠을 선택해 모둠원을 추가합니다. 기존 모둠원은 그대로 유지됩니다.</p>
+      <h2>모둠원 관리</h2>
+      <p>기존 모둠을 선택해 모둠원을 수정·삭제하거나 추가합니다.</p>
       <form onSubmit={handleSubmit}>
         <select
           value={selectedGroupId}
@@ -100,7 +170,49 @@ export default function GroupMemberAddForm() {
           ))}
         </select>
 
+        {selectedGroupId && (
+          <div className="group-member-add-form__members">
+            <strong>현재 모둠원 ({currentMembers.length}명)</strong>
+            {currentMembers.length === 0 && <span>등록된 모둠원이 없습니다.</span>}
+            {currentMembers.map((m) => (
+              <div className="group-member-add-form__member-row" key={m.id}>
+                {editingId === m.id ? (
+                  <>
+                    <input
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          saveEdit(m)
+                        }
+                      }}
+                    />
+                    <button type="button" onClick={() => saveEdit(m)} disabled={busyId === m.id}>
+                      저장
+                    </button>
+                    <button type="button" onClick={() => setEditingId(null)}>
+                      취소
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ flex: 1 }}>{m.name}</span>
+                    <button type="button" onClick={() => startEdit(m)} disabled={busyId === m.id}>
+                      수정
+                    </button>
+                    <button type="button" onClick={() => deleteMember(m)} disabled={busyId === m.id}>
+                      삭제
+                    </button>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="group-member-add-form__members">
+          <strong>모둠원 추가</strong>
           {members.map((m, i) => (
             <div className="group-member-add-form__member-row" key={i}>
               <input
