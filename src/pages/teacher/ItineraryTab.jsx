@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { useAllGroupsRealtime } from '../../hooks/useAllGroupsRealtime'
 import MapView from '../../components/common/MapView'
+import { buildPlannedRoute } from '../../lib/plannedRoute'
 
 export default function ItineraryTab() {
   const { groups, timetableItems, checkins, loading } = useAllGroupsRealtime()
@@ -27,13 +28,7 @@ export default function ItineraryTab() {
     .sort((a, b) => a.seq - b.seq)
 
   const checkedItemIds = new Set(checkins.map((c) => c.timetable_item_id))
-  const mappableItems = items.filter((t) => t.lat != null && t.lng != null)
-  const unmappedItems = items.filter((t) => t.lat == null || t.lng == null)
-  const plannedPoints = mappableItems.map((t) => ({
-    lat: t.lat,
-    lng: t.lng,
-    done: checkedItemIds.has(t.id),
-  }))
+  const { plannedPoints, unmappedItems } = buildPlannedRoute(items, checkedItemIds)
 
   if (loading) return <p>불러오는 중...</p>
 

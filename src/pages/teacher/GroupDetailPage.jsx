@@ -5,6 +5,7 @@ import { useGoogleMapsLoaded } from '../../context/GoogleMapsContext'
 import { getCheckinPhotoUrl } from '../../lib/checkin'
 import TimetableItemEditForm, { deleteTimetableItem } from '../../components/common/TimetableItemEditForm'
 import MapView from '../../components/common/MapView'
+import { buildPlannedRoute } from '../../lib/plannedRoute'
 import CheckinStamp from '../../components/common/CheckinStamp'
 
 export default function GroupDetailPage() {
@@ -25,6 +26,9 @@ export default function GroupDetailPage() {
     return map
   }, [checkins, groupId])
 
+  const { plannedPoints, unmappedItems } = buildPlannedRoute(items, new Set(Object.keys(checkinsByItem)))
+
+  // 계획된 장소 좌표가 하나도 없을 때만 쓰는 대체 지도 (체크인한 실제 위치 기준)
   const donePoints = items
     .filter((t) => checkinsByItem[t.id])
     .sort((a, b) => new Date(checkinsByItem[a.id].checked_in_at) - new Date(checkinsByItem[b.id].checked_in_at))
@@ -54,7 +58,16 @@ export default function GroupDetailPage() {
         <a href={`tel:${group.leader_phone?.replace(/-/g, '')}`}>{group.leader_phone}</a>
       </p>
 
-      <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
+      {plannedPoints.length > 0 ? (
+        <MapView plannedPoints={plannedPoints} />
+      ) : (
+        <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
+      )}
+      {unmappedItems.length > 0 && plannedPoints.length > 0 && (
+        <p className="itinerary-tab__map-note">
+          지도에 표시되지 않은 장소: {unmappedItems.map((t) => t.place_name).join(', ')}
+        </p>
+      )}
 
       <ul className="group-detail__timeline">
         {items.map((item) => {
