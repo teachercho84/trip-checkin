@@ -431,6 +431,17 @@ a {
   margin: 4px 0;
 }
 
+.itinerary-tab__map-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 8px 0;
+}
+
+.itinerary-tab__done {
+  color: #ff7a59;
+  font-weight: 600;
+}
+
 .itinerary-tab__list {
   list-style: none;
   padding: 0;

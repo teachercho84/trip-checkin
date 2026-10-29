@@ -14,13 +14,63 @@ const MAP_OPTIONS = {
  * Renders a group's checked-in points as numbered markers connected by a
  * straight polyline in check-in order, plus upcoming (not yet checked-in)
  * points as separate gray markers, per spec section 5.1/5.2.
+ *
+ * When `plannedPoints` ([{ lat, lng, done }], in schedule order) is given, the
+ * map instead shows the planned route: numbered markers (orange once checked
+ * in, gray otherwise) joined by direction arrows in schedule order.
  */
-export default function MapView({ donePoints = [], upcomingPoints = [], center }) {
+export default function MapView({ donePoints = [], upcomingPoints = [], plannedPoints, center }) {
   const isLoaded = useGoogleMapsLoaded()
 
   if (!isLoaded) return <div style={CONTAINER_STYLE}>지도를 불러오는 중...</div>
 
-  const mapCenter = center ?? donePoints[0] ?? upcomingPoints[0] ?? { lat: 37.5665, lng: 126.978 }
+  const mapCenter =
+    center ?? plannedPoints?.[0] ?? donePoints[0] ?? upcomingPoints[0] ?? { lat: 37.5665, lng: 126.978 }
+
+  if (plannedPoints) {
+    return (
+      <GoogleMap mapContainerStyle={CONTAINER_STYLE} center={mapCenter} zoom={13} options={MAP_OPTIONS}>
+        {plannedPoints.slice(1).map((p, i) => (
+          <Polyline
+            key={`seg-${i}`}
+            path={[plannedPoints[i], p]}
+            options={{
+              strokeColor: '#159aa6',
+              strokeOpacity: 0.6,
+              strokeWeight: 3,
+              icons: [
+                {
+                  icon: {
+                    path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 3,
+                    strokeColor: '#159aa6',
+                    fillColor: '#159aa6',
+                    fillOpacity: 1,
+                  },
+                  offset: '50%',
+                },
+              ],
+            }}
+          />
+        ))}
+        {plannedPoints.map((p, i) => (
+          <Marker
+            key={`planned-${i}`}
+            position={{ lat: p.lat, lng: p.lng }}
+            label={{ text: String(i + 1), color: '#fff', fontSize: '12px', fontWeight: '600' }}
+            icon={{
+              path: window.google.maps.SymbolPath.CIRCLE,
+              scale: 10,
+              fillColor: p.done ? '#ff7a59' : '#9ca3af',
+              fillOpacity: 1,
+              strokeColor: '#fff',
+              strokeWeight: 2,
+            }}
+          />
+        ))}
+      </GoogleMap>
+    )
+  }
 
   return (
     <GoogleMap mapContainerStyle={CONTAINER_STYLE} center={mapCenter} zoom={13} options={MAP_OPTIONS}>
