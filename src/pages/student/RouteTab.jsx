@@ -3,14 +3,17 @@ import { useSession } from '../../context/SessionContext'
 import { useGroupBundle } from '../../hooks/useGroupBundle'
 import { useInvalidAccessCodeRecovery } from '../../hooks/useInvalidAccessCodeRecovery'
 import MapView from '../../components/common/MapView'
+import { buildPlannedRoute } from '../../lib/plannedRoute'
 
 export default function RouteTab() {
   const { accessCode } = useSession()
   const { bundle, loading, error } = useGroupBundle(accessCode)
   useInvalidAccessCodeRecovery(error)
 
-  const { donePoints, upcomingPoints, orderedCheckins } = useMemo(() => {
-    if (!bundle) return { donePoints: [], upcomingPoints: [], orderedCheckins: [] }
+  const { donePoints, upcomingPoints, orderedCheckins, plannedPoints, unmappedItems } = useMemo(() => {
+    if (!bundle) {
+      return { donePoints: [], upcomingPoints: [], orderedCheckins: [], plannedPoints: [], unmappedItems: [] }
+    }
     const itemsById = Object.fromEntries(bundle.timetable.map((t) => [t.id, t]))
     const ordered = [...bundle.checkins].sort(
       (a, b) => new Date(a.checked_in_at) - new Date(b.checked_in_at),
@@ -21,7 +24,8 @@ export default function RouteTab() {
       .filter((t) => !checkedItemIds.has(t.id) && t.lat != null && t.lng != null)
       .map((t) => ({ lat: t.lat, lng: t.lng }))
     const orderedCheckins = ordered.map((c) => ({ ...c, place: itemsById[c.timetable_item_id]?.place_name }))
-    return { donePoints: done, upcomingPoints: upcoming, orderedCheckins }
+    const { plannedPoints, unmappedItems } = buildPlannedRoute(bundle.timetable, checkedItemIds)
+    return { donePoints: done, upcomingPoints: upcoming, orderedCheckins, plannedPoints, unmappedItems }
   }, [bundle])
 
   if (!accessCode) return <p>접속 코드가 없습니다. 모둠 링크로 다시 접속해주세요.</p>
@@ -31,7 +35,16 @@ export default function RouteTab() {
   return (
     <div className="route-tab">
       <h1>이동 경로</h1>
-      <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
+      {plannedPoints.length > 0 ? (
+        <MapView plannedPoints={plannedPoints} />
+      ) : (
+        <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
+      )}
+      {unmappedItems.length > 0 && plannedPoints.length > 0 && (
+        <p className="itinerary-tab__map-note">
+          지도에 표시되지 않은 장소: {unmappedItems.map((t) => t.place_name).join(', ')}
+        </p>
+      )}
       <ol className="route-tab__list">
         {orderedCheckins.map((c, i) => (
           <li key={c.timetable_item_id}>

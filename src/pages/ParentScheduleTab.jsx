@@ -2,13 +2,14 @@ import { useMemo } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { getCheckinPhotoUrl } from '../lib/checkin'
 import MapView from '../components/common/MapView'
+import { buildPlannedRoute } from '../lib/plannedRoute'
 import CheckinStamp from '../components/common/CheckinStamp'
 
 /** 학부모용 일정/지도 탭 (읽기 전용, 체크인/수정 액션 없음). */
 export default function ParentScheduleTab() {
   const { bundle } = useOutletContext()
 
-  const { items, checkinsByItem, donePoints, upcomingPoints } = useMemo(() => {
+  const { items, checkinsByItem, donePoints, upcomingPoints, plannedPoints, unmappedItems } = useMemo(() => {
     const checkinsByItem = {}
     for (const c of bundle.checkins) checkinsByItem[c.timetable_item_id] = c
     const items = bundle.timetable
@@ -19,12 +20,22 @@ export default function ParentScheduleTab() {
     const upcomingPoints = items
       .filter((t) => !checkinsByItem[t.id] && t.lat != null && t.lng != null)
       .map((t) => ({ lat: t.lat, lng: t.lng }))
-    return { items, checkinsByItem, donePoints, upcomingPoints }
+    const { plannedPoints, unmappedItems } = buildPlannedRoute(items, new Set(Object.keys(checkinsByItem)))
+    return { items, checkinsByItem, donePoints, upcomingPoints, plannedPoints, unmappedItems }
   }, [bundle])
 
   return (
     <>
-      <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
+      {plannedPoints.length > 0 ? (
+        <MapView plannedPoints={plannedPoints} />
+      ) : (
+        <MapView donePoints={donePoints} upcomingPoints={upcomingPoints} />
+      )}
+      {unmappedItems.length > 0 && plannedPoints.length > 0 && (
+        <p className="itinerary-tab__map-note">
+          지도에 표시되지 않은 장소: {unmappedItems.map((t) => t.place_name).join(', ')}
+        </p>
+      )}
 
       <ul className="group-detail__timeline">
         {items.map((item) => {
